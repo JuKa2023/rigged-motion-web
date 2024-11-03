@@ -18,39 +18,50 @@ export function LandingPageComponent() {
       </header>
 
       <main className="container mx-auto px-4">
-        <section className="py-20 text-center">
-          <h1 className="text-7xl font-bold mb-6 bg-clip-text text-white">
-Rigged Motion Studios</h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-            We're your creative partner for stunning 3D animations and visual effects. 
-            Transform your ideas into captivating visual experiences.
-          </p>
-          <div className="flex justify-center space-x-4">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-              Explore Auctions <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-blue-900">
-              Our Services <Play className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-        </section>
+          <section className="py-20 text-center">
+              <h1 className="text-7xl font-bold mb-6 bg-clip-text text-white">
+                  Rigged Motion Studios</h1>
+              <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                  Willkommen bei Rigged Motion Studios, Ihrem kreativen Partner für beeindruckende 3D-Animationen für
+                  Werbezwecke. Wir sind ein junges, dynamisches Team von Designern und Animatoren, das mit Leidenschaft
+                  und frischen Ideen daran arbeitet, Deine Visionen zum Leben zu erwecken.</p>
+              <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                  Mit modernster Technologie und einem Auge für Details gestalten wir visuelle Erlebnisse, die
+                  begeistern und in Erinnerung bleiben.</p>
+              <div className="flex justify-center space-x-4">
+                  <Button
+                      size="lg"
+                      className="text-blue-900"
+                      style={{backgroundColor: '#DBD2A4'}}
+                  >
+                      Explore Auctions <ArrowRight className="ml-2 h-4 w-4"/>
+                  </Button>
+              </div>
+          </section>
 
 
-        <section className="py-16">
-          <h2 className="text-3xl font-bold mb-8 text-center">Our Services</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { title: '3D Animation', icon: Box, description: 'Breathtaking 3D animations that bring your ideas to life.' },
-              { title: 'Visual Effects', icon: Award, description: 'Stunning visual effects that elevate your project to the next level.' },
+          <section className="py-16">
+              <h2 className="text-3xl font-bold mb-8 text-center">Our Services</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {[
+                      {
+                          title: '3D Animation',
+                          icon: Box,
+                          description: 'Breathtaking 3D animations that bring your ideas to life.'
+                      },
+                      {
+                          title: 'Visual Effects',
+                          icon: Award,
+                          description: 'Stunning visual effects that elevate your project to the next level.' },
               { title: 'Virtual Tours', icon: Box, description: 'Immersive virtual tours that showcase your space in incredible detail.' },
             ].map((service, index) => (
-              <Card key={index} className="bg-blue-800 border-none hover:bg-blue-700 transition-colors duration-300">
+              <Card key={index} className="border-none hover:bg-blue-700 transition-colors duration-300" style={{backgroundColor: '#1E4959'}}>
                 <CardHeader>
                   <service.icon className="h-12 w-12 mb-4 text-blue-400" />
-                  <CardTitle className="text-xl font-bold">{service.title}</CardTitle>
+
                 </CardHeader>
                 <CardContent>
-                  <p>{service.description}</p>
+                    <CardTitle className="text-xl font-bold">{service.title}</CardTitle>
                 </CardContent>
               </Card>
             ))}
