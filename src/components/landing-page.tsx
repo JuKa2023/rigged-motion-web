@@ -35,29 +35,6 @@ Rigged Motion Studios</h1>
           </div>
         </section>
 
-        <section className="py-16">
-          <h2 className="text-3xl font-bold mb-8 text-center">Featured Auction</h2>
-          <Card className="bg-blue-800 border-none shadow-lg">
-            <CardContent className="p-6 flex flex-col md:flex-row items-center">
-              <div className="md:w-1/2 mb-6 md:mb-0">
-                <img src="/placeholder.svg?height=300&width=400" alt="Featured Project" className="rounded-lg shadow-md" />
-              </div>
-              <div className="md:w-1/2 md:pl-6">
-                <h3 className="text-2xl font-bold mb-4">Futuristic City Animation</h3>
-                <p className="mb-4">A breathtaking 3D animation of a futuristic cityscape. This project showcases our expertise in creating immersive environments and dynamic visual effects.</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm">Current Bid</p>
-                    <p className="text-2xl font-bold">€5,000</p>
-                  </div>
-                  <Button className="bg-green-600 hover:bg-green-700">
-                    Place Bid <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
 
         <section className="py-16">
           <h2 className="text-3xl font-bold mb-8 text-center">Our Services</h2>
@@ -99,20 +76,6 @@ Rigged Motion Studios</h1>
           </Card>
         </section>
 
-        <section className="py-16">
-          <h2 className="text-3xl font-bold mb-8 text-center">Stay Updated</h2>
-          <Card className="bg-blue-800 border-none">
-            <CardContent className="p-6">
-              <p className="text-center mb-4">Subscribe to our newsletter for the latest auction announcements and project showcases.</p>
-              <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <Input type="email" placeholder="Enter your email" className="bg-blue-700 border-blue-600 text-white placeholder-blue-300" />
-                <Button type="submit" className="bg-purple-600 hover:bg-purple-700">
-                  Subscribe
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </section>
       </main>
 
       <footer className="bg-blue-900 py-8 mt-16">
