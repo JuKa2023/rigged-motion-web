@@ -11,7 +11,7 @@ export function LandingPageComponent() {
               <div
                   className="flex justify-between items-center border-b border-white border-opacity-200 pb-4 w-full px-12"
                   style={{borderBottomColor: '#DBD2A4', borderBottomWidth: '5px'}}>
-                  <a href="#"> <img src="src/assets/Riggedmotion.svg" alt="logo" className="h-8 flex-shrink-0"/> </a>
+                  <a href="#"> <img src="../../public/assets/Riggedmotion.svg" alt="logo" className="h-8 flex-shrink-0"/> </a>
                   <nav className="ml-auto w-1/3 flex justify-end space-x-8 gap-4">
                       <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">Versteigerung</a>
                       <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">Kontakt</a>
@@ -86,11 +86,11 @@ export function LandingPageComponent() {
               <section className="py-16">
                   <h2 className="text-3xl font-bold mb-8 text-center">About Our Team</h2>
                   <div className="md:w-1/2 mb-6 md:mb-0">
-                      <img src="/placeholder.svg?height=300&width=400" alt="Our Team"
+                      <img src="/assets/placeholder.png?height=300&width=400" alt="Our Team"
                            className="rounded-lg shadow-md"/>
                   </div>
 
-                  <p className="text-lg">
+                  <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
                       We are a team of passionate multimedia students who share a love for 3D animations and
                       VFX.
                       During our studies, we discovered the joy of bringing ideas to life and telling stories
