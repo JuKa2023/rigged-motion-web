@@ -6,17 +6,6 @@ import { ArrowRight, Award, Box } from 'lucide-react'
 export function LandingPageComponent() {
   return (
       <div className="min-h-screen bg-gradient-to-r from-[#102532] to-[#DCA8CA] text-white font-sans">
-          <header className="container mx-auto py-6 flex justify-between items-center">
-              <div
-                  className="flex justify-between items-center border-b border-white border-opacity-200 pb-4 w-full px-12"
-                  style={{borderBottomColor: '#DBD2A4', borderBottomWidth: '5px'}}>
-                  <a href="#"> <img src="/assets/Riggedmotion.svg" alt="logo" className="h-8 flex-shrink-0"/> </a>
-                  <nav className="ml-auto w-1/3 flex justify-end space-x-8 gap-4">
-                      <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">Versteigerung</a>
-                      <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">Kontakt</a>
-                  </nav>
-              </div>
-          </header>
 
           <main className="container mx-auto px-4">
               <section className="py-20 text-center">
@@ -108,19 +97,6 @@ export function LandingPageComponent() {
 
           </main>
 
-          <footer className="container mx-auto py-6 flex justify-between items-center">
-              <div
-                  className="flex justify-between items-center border-t border-opacity-200 pt-4 w-full px-12"
-                  style={{borderTopColor: '#DBD2A4', borderTopWidth: '5px'}}
-              >
-                  <div className="text-sm text-white">&copy; 2024 Rigged Motion Studios. All rights reserved.</div>
-                  <nav className="ml-auto w-1/3 flex justify-end space-x-8 gap-4">
-                  <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">AGB</a>
-                      <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">Impressum</a>
-                      <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">Datenschutz</a>
-                  </nav>
-              </div>
-          </footer>
       </div>
   )
 }
