@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { ArrowRight, Play, Award, Box } from 'lucide-react'
 
 export function LandingPageComponent() {
@@ -85,21 +84,26 @@ export function LandingPageComponent() {
 
               <section className="py-16">
                   <h2 className="text-3xl font-bold mb-8 text-center">About Our Team</h2>
-                  <div className="md:w-1/2 mb-6 md:mb-0">
-                      <img src="/assets/placeholder.png?height=300&width=400" alt="Our Team"
-                           className="rounded-lg shadow-md"/>
+
+                  {/* Center the image */}
+                  <div className="flex justify-center mb-8">
+                      <img
+                          src="/assets/placeholder.png?height=300&width=400"
+                          alt="Our Team"
+                          className="rounded-lg shadow-md"
+                          style={{maxWidth: '80%', height: 'auto'}} // Ensures responsive scaling
+                      />
                   </div>
 
                   <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                      We are a team of passionate multimedia students who share a love for 3D animations and
-                      VFX.
-                      During our studies, we discovered the joy of bringing ideas to life and telling stories
-                      visually.
-                      Each of us brings unique creative approaches and skills that we combine in collaborative
-                      projects.
-                      We're curious, experimental, and always looking for new challenges.
+                      We are a team of passionate multimedia students who share a love for 3D animations and VFX.
+                      During our studies, we discovered the joy of bringing ideas to life and telling stories visually.
                   </p>
 
+                  <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                      Each of us brings unique creative approaches and skills that we combine in collaborative projects.
+                      We're curious, experimental, and always looking for new challenges.
+                  </p>
               </section>
 
           </main>
@@ -111,7 +115,7 @@ export function LandingPageComponent() {
               >
                   <div className="text-sm text-white">&copy; 2024 Rigged Motion Studios. All rights reserved.</div>
                   <nav className="ml-auto w-1/3 flex justify-end space-x-8 gap-4">
-                      <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">AGB</a>
+                  <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">AGB</a>
                       <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">Impressum</a>
                       <a href="#" className="text-white hover:text-gray-300 text-lg font-semibold">Datenschutz</a>
                   </nav>
