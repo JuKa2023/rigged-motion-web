@@ -24,14 +24,23 @@ Team information section
 ## 📦 Installation
 
 1. Clone the repository:
+
+```
 git clone <https://github.com/your-username/rigged-Motion-Studios_Diggezz2.git>
 cd rigged-Motion-Studios_Diggezz2
+```
 
-2. Install dependencies:
+1. Install dependencies:
+
+```
 nmp install
+```
 
-3. Start the development server:
+1. Start the development server:
+
+```
 npm run dev
+```
 
 ## 🏗️ Project Structure
 
@@ -51,6 +60,7 @@ The project uses Tailwind CSS with custom theme configuration. The theme include
 - Responsive design utilities
 Reference to theme configuration:
 
+```
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: ["class"],
@@ -113,6 +123,7 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 }
+```
 
 ## 🧩 Components
 
@@ -124,6 +135,7 @@ The project includes several reusable components:
 - Landing Page
 
 The main landing page component can be found here:
+```
 import React from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -215,6 +227,8 @@ Rigged Motion Studios</h1>
     </div>
   )
 }
+
+```
 
 ## 📝 License
 
