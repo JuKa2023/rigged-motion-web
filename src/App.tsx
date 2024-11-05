@@ -5,9 +5,9 @@ import { ContactPageComponent } from './components/contact-page';
 import {HeaderComponent} from './components/header';
 import {FooterComponent} from './components/footer';
 
+
 function App() {
     return (
-
         <Router>
             <HeaderComponent />
             <Routes>
