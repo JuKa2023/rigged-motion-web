@@ -8,14 +8,16 @@ import {FooterComponent} from './components/footer';
 
 function App() {
     return (
-        <Router>
-            <HeaderComponent />
-            <Routes>
-                <Route path="/" element={<LandingPageComponent />} />
-                <Route path="/contact" element={<ContactPageComponent />} />
-            </Routes>
-            <FooterComponent />
-        </Router>
+        <div className="min-h-screen bg-gradient-to-r from-[#102532] to-[#DCA8CA] text-white font-sans">
+            <HeaderComponent/>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<LandingPageComponent/>}/>
+                    <Route path="/contact" element={<ContactPageComponent/>}/>
+                </Routes>
+            </Router>
+            <FooterComponent/>
+        </div>
     );
 }
 
