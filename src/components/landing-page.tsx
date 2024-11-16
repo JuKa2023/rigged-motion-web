@@ -19,11 +19,7 @@ export function LandingPageComponent() {
                   Mit modernster Technologie und einem Auge für Details gestalten wir visuelle Erlebnisse, die
                   begeistern und in Erinnerung bleiben.</p>
               <div className="flex justify-center space-x-4">
-                  <Button
-                      size="lg"
-                      className="text-blue-900"
-                      style={{backgroundColor: '#DBD2A4'}}
-                  >
+                  <Button>
                       Explore Auctions <ArrowRight className="ml-2 h-4 w-4"/>
                   </Button>
               </div>
