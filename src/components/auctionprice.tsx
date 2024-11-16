@@ -1,6 +1,7 @@
+import React from 'react'
 import { Button } from "@/components/ui/button"
 
-export default function auctionpricecomponent() {
+export function auctionpricecomponent() {
     return (
         <section className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-4 py-16 space-y-16 text-center">
             <div className="space-y-4 max-w-3xl">
@@ -23,7 +24,7 @@ export default function auctionpricecomponent() {
                 <Button
                     variant="secondary"
                 >
-                    Wie funktioniert die auktion
+                    Wie funktioniert die Auktion
                 </Button>
                 <Button
                     variant="secondary"
