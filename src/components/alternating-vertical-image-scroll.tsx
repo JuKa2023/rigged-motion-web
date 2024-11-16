@@ -3,7 +3,7 @@ import React from 'react'
 
 export function AlternatingVerticalImageScroll() {
   return (
-    <div className="min-h-screen w-full bg-white overflow-x-hidden">
+    <div className="min-h-screen w-full overflow-x-hidden">
       {/* Image containers */}
       <div className="relative mx-auto max-w-4xl">
         {/* First image - Right side */}
