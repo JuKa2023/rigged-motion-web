@@ -1,15 +1,15 @@
 import React from 'react'
 import { Button } from "@/components/ui/button"
 
-export function auctionpricecomponent() {
+export function Auctionpricecomponent() {
     return (
         <section className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-4 py-16 space-y-16 text-center">
             <div className="space-y-4 max-w-3xl">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight uppercase">
-                    Es könnte ihr produkt sein welches hier auf der erde landet
+                    Es könnte ihr produkt sein welches hier auf der Erde landet
                 </h1>
                 <p className="text-lg md:text-xl lg:text-2xl uppercase">
-                    Bieten sie jetz mit um ihr produkt galaktisch zu bewerben
+                    Bieten sie jetzt mit um ihr Produkt galaktisch zu bewerben
                 </p>
             </div>
 
@@ -20,7 +20,7 @@ export function auctionpricecomponent() {
                 </p>
             </div>
 
-            <div className="flex flex-row gap-4 w-full max-w-2xl justify-center">
+            <div className="flex flex-row gap-16 w-full max-w-2xl justify-center">
                 <Button
                     variant="secondary"
                 >
