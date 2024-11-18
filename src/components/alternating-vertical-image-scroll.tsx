@@ -45,28 +45,28 @@ export function AlternatingVerticalImageScroll() {
         <div className="relative mx-auto max-w-4xl">
           {/* First image - Right side */}
           <div className="h-screen flex items-center justify-end p-4">
-            <motion.div
-                className="w-64 h-64"
-                animate={{
-                  y: [0, -20, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-            >
-              <img
-                  src="/placeholder.svg?height=256&width=256"
-                  alt="Landscape 1"
-                  className="w-full h-full object-cover"
-              />
-            </motion.div>
+              <motion.div
+                  className="w-64 h-64"
+                  animate={{
+                      y: [0, -20, 0],
+                  }}
+                  transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                  }}
+              >
+                  <img
+                      src="/assets/productPhotography_placeholder1.jpg"
+                      alt="Product Photography Placeholder 1"
+                      className="w-full h-full object-cover"
+                  />
+              </motion.div>
           </div>
 
-          {/* Second image - Left side */}
-          <div className="h-screen flex items-center justify-start p-4">
-            <motion.div
+            {/* Second image - Left side */}
+            <div className="h-screen flex items-center justify-start p-4">
+                <motion.div
                 className="w-64 h-64"
                 animate={{
                   y: [0, 20, 0],
@@ -78,7 +78,7 @@ export function AlternatingVerticalImageScroll() {
                 }}
             >
               <img
-                  src="/placeholder.svg?height=256&width=256"
+                  src="/assets/productPhotography_placeholer2.jpg?height=256&width=256"
                   alt="Landscape 2"
                   className="w-full h-full object-cover"
               />
@@ -99,7 +99,7 @@ export function AlternatingVerticalImageScroll() {
                 }}
             >
               <img
-                  src="/placeholder.svg?height=256&width=256"
+                  src="/assets/productPhotography_placeholder3.jpg?height=256&width=256"
                   alt="Landscape 3"
                   className="w-full h-full object-cover"
               />
