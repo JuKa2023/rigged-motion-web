@@ -51,7 +51,7 @@ export function AlternatingVerticalImageScroll() {
             {/* Alternating images with animations */}
             <div className="relative mx-auto max-w-4xl">
                 {/* First image - Right side */}
-                <div className="h-screen flex items-center justify-end p-4">
+                <div className="h-screen flex items-center lg:justify-end sm:justify-center p-4">
                     <motion.div
                         className="w-64 aspect-[4/5]"
                         animate={{
@@ -74,7 +74,7 @@ export function AlternatingVerticalImageScroll() {
                 </div>
 
                 {/* Second image - Left side */}
-                <div className="h-screen flex items-center justify-start p-4">
+                <div className="h-screen flex items-center lg:justify-start sm:justify-center p-4">
                     <motion.div
                         className="w-64 aspect-[4/5]"
                         animate={{
@@ -97,7 +97,7 @@ export function AlternatingVerticalImageScroll() {
                 </div>
 
                 {/* Third image - Right side */}
-                <div className="h-screen flex items-center justify-end p-4">
+                <div className="h-screen flex items-center lg:justify-end sm:justify-center p-4">
                     <motion.div
                         className="w-64 aspect-[4/5]"
                         animate={{
