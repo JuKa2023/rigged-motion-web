@@ -5,7 +5,7 @@ export function Auctionpricecomponent() {
     return (
         <section
             style={{
-                backgroundImage: "url(./assets/background_auction.jpg)",
+                backgroundImage: "url('/assets/background_auction.png')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }}
