@@ -2,7 +2,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
-import React from "react"
 
 export function ContactPageComponent() {
     return (

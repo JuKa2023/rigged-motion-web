@@ -1,6 +1,3 @@
-import React from 'react'
-
-
 export function AlternatingVerticalImageScroll() {
   return (
     <div className="min-h-screen w-full overflow-x-hidden">

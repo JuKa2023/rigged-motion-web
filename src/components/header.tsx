@@ -1,6 +1,3 @@
-import React from 'react'
-
-
 export function HeaderComponent() {
     return (
         <header className="container mx-auto py-6 flex justify-between items-center">
