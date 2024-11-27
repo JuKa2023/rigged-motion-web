@@ -9,7 +9,7 @@ import { AuctionPageComponent } from "@/components/auction.tsx";
 function App() {
     return (
         <div className="min-h-screen bg-gradient-to-r from-[#102532] to-[#DCA8CA] text-white font-sans">
-            <Router>
+            <Router basename="/rigged-Motion-Studios_Diggezz2/">
                 <HeaderComponent />
                 <Routes>
                     <Route path="/" element={<LandingPageComponent />} />

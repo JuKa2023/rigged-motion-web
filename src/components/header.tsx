@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import RiggedmotionSvg from '/assets/Riggedmotion.svg';
 
 export function HeaderComponent() {
     return (
@@ -8,7 +9,7 @@ export function HeaderComponent() {
                 style={{ borderBottomColor: '#DBD2A4', borderBottomWidth: '5px' }}
             >
                 <Link to="/">
-                    <img src="/assets/Riggedmotion.svg" alt="logo" className="h-8 flex-shrink-0" />
+                    <img src={RiggedmotionSvg} alt="logo" className="h-8 flex-shrink-0" />
                 </Link>
                 <nav className="ml-auto w-1/3 flex justify-end space-x-8 gap-4">
                     <Link to="/auction">Versteigerung</Link>
