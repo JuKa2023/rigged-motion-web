@@ -13,11 +13,9 @@ export function Auctionpricecomponent() {
         >
             {/* Header Section */}
             <div className="space-y-4 max-w-3xl">
-                <h1 className="text-2xl md:text-3xl  lg:text-4xl font-bold tracking-tight uppercase">
-                    Es könnte ihr Produkt sein welches hier auf der Erde landet
-                </h1>
                 <p className="text-lg md:text-xl lg:text-2xl uppercase">
-                    Bieten Sie jetzt mit, um Ihr Produkt galaktisch zu bewerben
+                    Es könnte ihr Produkt sein, welches hier auf der
+                    Erde landet. Bieten Sie jetzt mit, um Ihr Produkt galaktisch zu bewerben
                 </p>
             </div>
 
@@ -30,9 +28,9 @@ export function Auctionpricecomponent() {
             </div>
 
             {/* Buttons Section */}
-            <div className="flex flex-col md:flex-row gap-4 w-full max-w-2xl justify-center items-center">
+            <div className="flex flex-col md:flex-row gap-16 w-full max-w-2xl justify-center items-center py-16">
                 <Button variant="secondary">
-                    Wie funktioniert die Auktion
+                    Fragen zur Auktion
                 </Button>
                 <Button variant="secondary">
                     Dein Gebot abgeben
