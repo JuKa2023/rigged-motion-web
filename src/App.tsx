@@ -15,6 +15,7 @@ function App() {
                     <Route path="/" element={<LandingPageComponent />} />
                     <Route path="/contact" element={<ContactPageComponent />} />
                     <Route path="/auction" element={<AuctionPageComponent />} />
+
                     <Route path="*" element={<div>404</div>} />
                 </Routes>
             </Router>
