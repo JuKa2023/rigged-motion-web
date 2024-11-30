@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, Award, Box } from 'lucide-react'
+import placeholderpng from '/assets/placeholder.png'
 
 export function LandingPageComponent() {
   return (
@@ -70,7 +71,7 @@ export function LandingPageComponent() {
               {/* Center the image */}
               <div className="flex justify-center mb-8">
                   <img
-                      src="/assets/placeholder.png?height=300&width=400"
+                      src={placeholderpng}
                       alt="Our Team"
                       className="rounded-lg shadow-md"
                       style={{maxWidth: '80%', height: 'auto'}} // Ensures responsive scaling
