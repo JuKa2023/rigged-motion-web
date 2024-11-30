@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom';
 import RiggedmotionSvg from '/assets/Riggedmotion.svg';
 
+import { GoogleSignInComponent } from "@/components/GoogleSignIn.tsx";
+import { SignOut } from "@/components/SignOut.tsx";
+
+const [user, setUser] = useState<User | null>(null)
+
 export function HeaderComponent() {
     return (
         <header className="container mx-auto py-6 flex justify-between items-center">
@@ -14,6 +19,14 @@ export function HeaderComponent() {
                 <nav className="ml-auto w-1/3 flex justify-end space-x-8 gap-4">
                     <Link to="/auction">Versteigerung</Link>
                     <Link to="/contact">Kontakt</Link>
+                    {user ? (
+                    <div>
+                        <SignOut />
+                    ) : (
+                    <GoogleSignInComponent />
+                    </div>
+                    )
+                    }
                 </nav>
             </div>
         </header>
