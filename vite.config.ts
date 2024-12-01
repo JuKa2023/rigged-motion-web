@@ -4,10 +4,14 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react()],
-  base: "/rigged-Motion-Studios_Diggezz2/",
+  publicDir: 'public',
   resolve: {
-    alias:{
+    alias: {
       "@": path.resolve(__dirname, "./src"),
     }
+  },
+  build: {
+    assetsDir: 'assets',
+    copyPublicDir: true,
   }
 })

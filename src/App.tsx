@@ -5,22 +5,24 @@ import { ContactPageComponent } from './components/contact-page';
 import { HeaderComponent } from './components/header';
 import { FooterComponent } from './components/footer';
 import { AuctionPageComponent } from "@/components/auction.tsx";
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
     return (
-        <div className="min-h-screen bg-gradient-to-r from-[#102532] to-[#DCA8CA] text-white font-sans">
-            <Router basename="/rigged-Motion-Studios_Diggezz2/">
-                <HeaderComponent />
-                <Routes>
-                    <Route path="/" element={<LandingPageComponent />} />
-                    <Route path="/contact" element={<ContactPageComponent />} />
-                    <Route path="/auction" element={<AuctionPageComponent />} />
-
-                    <Route path="*" element={<div>404</div>} />
-                </Routes>
-            </Router>
-            <FooterComponent />
-        </div>
+        <AuthProvider>
+            <div className="min-h-screen bg-gradient-to-r from-[#102532] to-[#DCA8CA] text-white font-sans">
+                <Router basename="/rigged-Motion-Studios_Diggezz2/">
+                    <HeaderComponent />
+                    <Routes>
+                        <Route path="/" element={<LandingPageComponent />} />
+                        <Route path="/contact" element={<ContactPageComponent />} />
+                        <Route path="/auction" element={<AuctionPageComponent />} />
+                        <Route path="*" element={<div>404</div>} />
+                    </Routes>
+                    <FooterComponent />
+                </Router>
+            </div>
+        </AuthProvider>
     );
 }
 
