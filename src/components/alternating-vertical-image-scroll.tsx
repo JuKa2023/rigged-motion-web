@@ -1,7 +1,9 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
+
+import  Productpotogrtapohy1jpg from '/assets/productPhotography_placeholder1.jpg';
+import  Productpotogrtapohy2jpg from '/assets/productPhotography_placeholer2.jpg';
+import  Productpotogrtapohy3jpg from '/assets/productPhotography_placeholder3.jpg';
 
 export function AlternatingVerticalImageScroll() {
     const [stars, setStars] = useState<{ x: number; y: number; delay: number }[]>([])
@@ -65,7 +67,7 @@ export function AlternatingVerticalImageScroll() {
                     >
                         <div className="w-full h-full">
                             <img
-                                src="/assets/productPhotography_placeholder1.jpg"
+                                src={Productpotogrtapohy1jpg}
                                 alt="Product Photography Placeholder 1"
                                 className="w-full h-full object-cover"
                             />
@@ -88,7 +90,7 @@ export function AlternatingVerticalImageScroll() {
                     >
                         <div className="w-full h-full">
                             <img
-                                src="/assets/productPhotography_placeholer2.jpg"
+                                src={Productpotogrtapohy2jpg}
                                 alt="Landscape 2"
                                 className="w-full h-full object-cover"
                             />
@@ -111,7 +113,7 @@ export function AlternatingVerticalImageScroll() {
                     >
                         <div className="w-full h-full">
                             <img
-                                src="/assets/productPhotography_placeholder3.jpg"
+                                src={Productpotogrtapohy3jpg}
                                 alt="Landscape 3"
                                 className="w-full h-full object-cover"
                             />
