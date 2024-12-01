@@ -13,7 +13,7 @@ export function HeaderComponent() {
 
     useEffect(() => {
         const {data: authListener} = supabase.auth.onAuthStateChange(
-            async (event, session) => {
+            async (_, session) => {
                 const currentUser = session?.user ?? null
                 setUser(currentUser)
             }
