@@ -25,4 +25,4 @@ dist-ssr
 
 *.tsbuildinfo
 
-src/.env
+.env

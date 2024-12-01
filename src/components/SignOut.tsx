@@ -14,4 +14,4 @@ const SignOut: React.FC = () => {
     return <button onClick={handleSignOut}>Sign Out</button>
 }
 
-export default SignOut
+export { SignOut }

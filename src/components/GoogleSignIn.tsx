@@ -1,7 +1,7 @@
 import React from 'react'
 import { supabase } from '../supabaseClient'
 
-const GoogleSignIn: React.FC = () => {
+const GoogleSignInComponent: React.FC = () => {
     const handleSignIn = async () => {
         try {
             const { error } = await supabase.auth.signInWithOAuth({
@@ -23,4 +23,4 @@ const GoogleSignIn: React.FC = () => {
     )
 }
 
-export default GoogleSignIn
+export { GoogleSignInComponent }
