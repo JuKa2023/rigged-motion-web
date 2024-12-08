@@ -11,7 +11,7 @@ function App() {
     return (
         <AuthProvider>
             <div className="min-h-screen bg-gradient-to-r from-[#102532] to-[#DCA8CA] text-white font-sans">
-                <Router basename="/rigged-Motion-Studios_Diggezz2/">
+                <Router>
                     <HeaderComponent />
                     <Routes>
                         <Route path="/" element={<LandingPageComponent />} />
