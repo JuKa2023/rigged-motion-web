@@ -4,7 +4,6 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react()],
-  base: "/rigged-Motion-Studios_Diggezz2/",
   resolve: {
     alias:{
       "@": path.resolve(__dirname, "./src"),
