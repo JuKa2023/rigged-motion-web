@@ -45,8 +45,8 @@ export function ContactPageComponent() {
                 <div className="grid lg:grid-cols-2 gap-16 items-start">
                     <div className="space-y-10">
                         <h1 className="text-4xl sm:text-5xl font-bold leading-tight">
-                            <span className="text-white">Bewege</span>{" "}
-                            <span className="text-[#d4c5a1]">etwas mit uns</span>
+                            <span className="text-white font-semibold text-[1.5em] sm:text-[1.5em]">Bewege</span>{" "}
+                            <span className="text-[#d4c5a1] text-base sm:text-lg">etwas mit uns</span>
                         </h1>
                         <iframe
                             data-tally-src="https://tally.so/embed/nGYdpo?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
@@ -59,10 +59,10 @@ export function ContactPageComponent() {
                         <div className="space-y-8 text-white">
                             <h2 className="text-3xl font-bold">Rigged Motions Studios</h2>
                             <div className="space-y-4 text-lg">
-                                <p className="text-[#d4c5a1]">Holzikhofenweg 8</p>
-                                <p className="text-[#d4c5a1]">3800 Bern</p>
-                                <p className="text-[#d4c5a1]">rigged.motion@gmail.com</p>
-                                <p className="text-[#d4c5a1]">Tel: 076 378 66 83</p>
+                                <p className="text-[#d4c5a1] text-xl font-semibold">Holzikhofenweg 8</p>
+                                <p className="text-[#d4c5a1] text-xl font-semibold">3800 Bern</p>
+                                <p className="text-[#d4c5a1] text-xl font-semibold">rigged.motion@gmail.com</p>
+                                <p className="text-[#d4c5a1] text-xl font-semibold">Tel: 076 378 66 83</p>
                             </div>
                         </div>
                     </div>
