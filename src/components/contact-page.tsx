@@ -1,44 +1,7 @@
-import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
-import {useEffect} from "react";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export function ContactPageComponent() {
-
-    useEffect(() => {
-        const widgetScriptSrc = 'https://tally.so/widgets/embed.js';
-
-        const load = () => {
-            // Load Tally embeds
-            if (typeof Tally !== 'undefined') {
-                Tally.loadEmbeds();
-                return;
-            }
-
-            // Fallback if window.Tally is not available
-            document
-                .querySelectorAll('iframe[data-tally-src]:not([src])')
-                .forEach((iframeEl) => {
-                    iframeEl.src = iframeEl.dataset.tallySrc;
-                });
-        };
-
-        // If Tally is already loaded, load the embeds
-        if (typeof Tally !== 'undefined') {
-            load();
-            return;
-        }
-
-        // If the Tally widget script is not loaded yet, load it
-        if (document.querySelector(`script[src="${widgetScriptSrc}"]`) === null) {
-            const script = document.createElement('script');
-            script.src = widgetScriptSrc;
-            script.onload = load;
-            script.onerror = load;
-            document.body.appendChild(script);
-            return;
-        }
-    }, []);
-
     return (
         <div className="min-h-screen">
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
@@ -50,9 +13,8 @@ export function ContactPageComponent() {
                         </h1>
                         <iframe
                             data-tally-src="https://tally.so/embed/nGYdpo?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
-                            loading="lazy" width="100%" height="0" frameBorder="0" marginHeight="0" marginWidth="0"
-                            title="Contact form
-                        "></iframe>
+                            loading="lazy" width="100%" height="0"
+                            title="Contact form"></iframe>
                     </div>
 
                     <div className="lg:pl-16 mt-12 lg:mt-0">
@@ -74,5 +36,5 @@ export function ContactPageComponent() {
                 </div>
             </main>
         </div>
-    )
+    );
 }

@@ -14,6 +14,7 @@ interface Auction {
   status: 'active' | 'completed' | 'cancelled'
 }
 
+/*
 interface Bid {
   id: string
   auction_id: string
@@ -21,6 +22,7 @@ interface Bid {
   amount: number
   created_at: string
 }
+*/
 
 export function Auctionpricecomponent() {
     const [auction, setAuction] = useState<Auction | null>(null)
@@ -190,7 +192,7 @@ export function Auctionpricecomponent() {
                     </div>
                 )}
                 
-                {user ? (
+                {user && auction ? (
                     <div className="flex flex-col md:flex-row gap-4 w-full">
                         <Input
                             type="number"
