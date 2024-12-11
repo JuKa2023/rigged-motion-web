@@ -3,26 +3,20 @@ import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react"
 import { supabase } from "../supabaseClient"
 import { User } from "@supabase/supabase-js"
+import { Checkbox } from "@/components/ui/checkbox"
 
 interface Auction {
-  id: string
-  title: string
-  description: string
-  current_price: number
-  min_bid_increment: number
-  end_time: string
-  status: 'active' | 'completed' | 'cancelled'
+    id: string
+    title: string
+    description: string
+    current_price: number
+    min_bid_increment: number
+    end_time: string
+    is_active: boolean
+    product_name: string
+    product_image_url: string
+    product_details: string
 }
-
-/*
-interface Bid {
-  id: string
-  auction_id: string
-  user_id: string
-  amount: number
-  created_at: string
-}
-*/
 
 export function Auctionpricecomponent() {
     const [auction, setAuction] = useState<Auction | null>(null)
@@ -31,11 +25,15 @@ export function Auctionpricecomponent() {
     const [error, setError] = useState<string>('')
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false)
 
     useEffect(() => {
         // Get current user
         supabase.auth.getUser().then(({ data: { user } }) => {
             setUser(user)
+            if (user) {
+                checkTermsAcceptance(user.id)
+            }
         })
 
         // Fetch auction details
@@ -61,6 +59,35 @@ export function Auctionpricecomponent() {
             subscription.unsubscribe()
         }
     }, [])
+
+    const checkTermsAcceptance = async (userId: string) => {
+        const { data, error } = await supabase
+            .from('terms_acceptance')
+            .select('*')
+            .eq('user_id', userId)
+            .single()
+
+        if (!error && data) {
+            setHasAcceptedTerms(true)
+        }
+    }
+
+    const handleTermsAcceptance = async () => {
+        if (!user) return
+
+        const { error } = await supabase
+            .from('terms_acceptance')
+            .insert([
+                {
+                    user_id: user.id,
+                    terms_version: 1
+                }
+            ])
+
+        if (!error) {
+            setHasAcceptedTerms(true)
+        }
+    }
 
     useEffect(() => {
         if (auction?.end_time) {
@@ -89,7 +116,7 @@ export function Auctionpricecomponent() {
         const { data, error } = await supabase
             .from('auctions')
             .select('*')
-            .eq('status', 'active')
+            .eq('is_active', true)
             .single()
 
         if (error) {
@@ -103,6 +130,11 @@ export function Auctionpricecomponent() {
     const handleBid = async () => {
         if (!user) {
             setError('Please sign in to place a bid')
+            return
+        }
+
+        if (!hasAcceptedTerms) {
+            setError('Please accept the terms of service before bidding')
             return
         }
 
@@ -156,6 +188,19 @@ export function Auctionpricecomponent() {
             }}
             className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-16 space-y-16 text-center"
         >
+            {/* Product Information Section */}
+            {auction?.product_image_url && (
+                <div className="max-w-2xl mx-auto bg-black/30 p-6 rounded-lg backdrop-blur-sm">
+                    <img
+                        src={auction.product_image_url}
+                        alt={auction.product_name}
+                        className="w-full h-64 object-cover rounded-lg mb-4"
+                    />
+                    <h2 className="text-2xl font-bold mb-2">{auction.product_name}</h2>
+                    <p className="text-gray-200">{auction.product_details}</p>
+                </div>
+            )}
+
             {/* Header Section */}
             <div className="space-y-4 max-w-3xl">
                 <h1 className="text-3xl font-bold mb-4">{auction?.title || 'Loading...'}</h1>
@@ -193,23 +238,49 @@ export function Auctionpricecomponent() {
                 )}
                 
                 {user && auction ? (
-                    <div className="flex flex-col md:flex-row gap-4 w-full">
-                        <Input
-                            type="number"
-                            value={bidAmount}
-                            onChange={(e) => setBidAmount(e.target.value)}
-                            placeholder="Enter bid amount"
-                            className="text-black"
-                            min={auction?.current_price + auction?.min_bid_increment}
-                            step={auction?.min_bid_increment}
-                        />
-                        <Button 
-                            onClick={handleBid}
-                            disabled={isLoading}
-                            className="whitespace-nowrap"
-                        >
-                            {isLoading ? 'Placing Bid...' : 'Place Bid'}
-                        </Button>
+                    <div className="space-y-4 w-full">
+                        {!hasAcceptedTerms && (
+                            <div className="bg-black/30 p-4 rounded-lg backdrop-blur-sm space-y-4">
+                                <h3 className="text-lg font-semibold">Allgemeine Geschäftsbedingungen</h3>
+                                <div className="text-sm text-left max-h-40 overflow-y-auto bg-black/20 p-4 rounded">
+                                    <p>1. Allgemeines</p>
+                                    <p>Diese Allgemeinen Geschäftsbedingungen (AGB) regeln die Nutzung der Auktionsplattform...</p>
+                                    {/* Add more terms content here */}
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id="terms"
+                                        checked={hasAcceptedTerms}
+                                        onCheckedChange={() => handleTermsAcceptance()}
+                                    />
+                                    <label
+                                        htmlFor="terms"
+                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                        Ich akzeptiere die AGB
+                                    </label>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex flex-col md:flex-row gap-4 w-full">
+                            <Input
+                                type="number"
+                                value={bidAmount}
+                                onChange={(e) => setBidAmount(e.target.value)}
+                                placeholder="Enter bid amount"
+                                className="text-black"
+                                min={auction?.current_price + auction?.min_bid_increment}
+                                step={auction?.min_bid_increment}
+                            />
+                            <Button 
+                                onClick={handleBid}
+                                disabled={isLoading || !hasAcceptedTerms}
+                                className="whitespace-nowrap"
+                            >
+                                {isLoading ? 'Placing Bid...' : hasAcceptedTerms ? 'Place Bid' : 'Accept Terms to Bid'}
+                            </Button>
+                        </div>
                     </div>
                 ) : (
                     <div className="space-y-4 w-full">
