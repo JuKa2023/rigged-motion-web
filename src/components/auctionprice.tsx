@@ -8,7 +8,7 @@ import { GoogleSignInComponent } from "./GoogleSignIn";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertCircle, Sparkles } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,

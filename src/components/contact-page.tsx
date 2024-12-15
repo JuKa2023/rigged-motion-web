@@ -2,30 +2,35 @@ import { Canvas } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import { Suspense, useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 
 function Robot() {
   const { scene } = useGLTF("/assets/roboter_website.glb");
-  const robotRef = useRef();
+  const robotRef = useRef<THREE.Mesh>();
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    
-    // Bouncing movement
+
+    if (
+      !robotRef.current ||
+      !robotRef.current.position ||
+      !robotRef.current.rotation
+    ) {
+      return;
+    }
+
+    // Now we can safely access and set the properties
     robotRef.current.position.y = Math.sin(time * 2) * 0.2;
-    
-    // Slight tilting/dancing movement
     robotRef.current.rotation.z = Math.sin(time * 3) * 0.1;
     robotRef.current.rotation.x = Math.sin(time * 2) * 0.1;
-    
-    // Gentle wobble instead of full rotation
     robotRef.current.rotation.y = Math.sin(time) * 0.3;
   });
 
   return (
-    <primitive 
+    <primitive
       ref={robotRef}
-      object={scene} 
-      position={[0, 0, 0]} 
+      object={scene}
+      position={[0, 0, 0]}
       rotation={[0, 0, 0]}
       scale={1.5}
     />
