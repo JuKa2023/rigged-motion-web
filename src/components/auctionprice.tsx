@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { Checkbox } from "@/components/ui/checkbox";
-import { motion } from "framer-motion";
 import { GoogleSignInComponent } from "./GoogleSignIn";
 
 interface Auction {
