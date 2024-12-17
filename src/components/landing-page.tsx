@@ -71,7 +71,7 @@ export function LandingPageComponent() {
       <div className="relative z-10">
         <main className="container mx-auto px-4">
           <section className="py-20 text-center">
-            <h1 className="text-7xl font-bold mb-6 bg-clip-text text-white">
+            <h1 className="bg-clip-text text-white">
               Rigged Motion Studios
             </h1>
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">

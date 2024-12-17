@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Sofachrome';
+  src: url('../assets/fonts-Sofachrome/sofachr.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -35,9 +42,11 @@ body {
 }
 
 h1 {
-  font-family: "sofachrome", sans-serif;
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-family: "Sofachrome", sans-serif;
+  font-size: 4.5rem;
+  line-height: 1;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
 }
 
 
