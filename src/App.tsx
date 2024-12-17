@@ -2,6 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LandingPageComponent } from './components/landing-page';
 import { ContactPageComponent } from './components/contact-page';
+import { ImpressumPageComponent} from "@/components/Impressum-page.tsx";
 import { HeaderComponent } from './components/header';
 import { FooterComponent } from './components/footer';
 import { AuctionPageComponent } from "@/components/auction.tsx";
@@ -17,6 +18,7 @@ function App() {
                         <Route path="/" element={<LandingPageComponent />} />
                         <Route path="/contact" element={<ContactPageComponent />} />
                         <Route path="/auction" element={<AuctionPageComponent />} />
+                        <Route path="/impressum" element={<ImpressumPageComponent />} />
                         <Route path="*" element={<div>404</div>} />
                     </Routes>
                     <FooterComponent />

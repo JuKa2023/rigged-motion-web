@@ -73,7 +73,7 @@ export function ContactPageComponent() {
                     {/* Tally Form */}
                     <div className="backdrop-blur-sm bg-black/20 p-6 rounded-lg">
                         <iframe
-                            data-tally-src="https://tally.so/embed/nGYdpo?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                            data-tally-src="https://tally.so/embed/me9yKQ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
                             loading="lazy"
                             width="100%"
                             height="500"
