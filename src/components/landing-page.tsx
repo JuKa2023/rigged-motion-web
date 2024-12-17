@@ -72,8 +72,9 @@ export function LandingPageComponent() {
         <main className="container mx-auto px-4">
           <section className="py-20 text-center">
             <h1 className="bg-clip-text text-white">
-              Rigged Motion Studios
+              Rigged Motion
             </h1>
+            <h1 className="bg-clip-text text-white">Studios</h1>
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
               Revolutionieren Sie Ihre Markenpräsenz mit unseren kreativen
               Videoproduktionen. Wir bieten exklusive Werbeplätze in einzigartigen
