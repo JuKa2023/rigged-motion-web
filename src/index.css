@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: 'Sofachrome';
-  src: url('../assets/fonts-Sofachrome/sofachr.ttf') format('truetype');
+  src: url('/assets/fonts-Sofachrome/sofachri.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

@@ -17,6 +17,7 @@ const SignOut: React.FC<{ className?: string }> = ({ className }) => {
     <Button
       onClick={handleSignOut}
       variant="ghost"
+      className={className}
     >
       <LogOut className="h-4 w-4" />
       Sign Out
