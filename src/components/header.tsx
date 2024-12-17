@@ -15,16 +15,16 @@ export function HeaderComponent() {
                         <img src={RiggedmotionSvg} alt="logo" className="h-8" />
                     </Link>
 
-                    <nav className="flex items-center space-x-8">
+                    <nav className="flex items-center space-x-8 gap-6">
                         <Link 
                             to="/auction" 
-                            className="text-gray-200 hover:text-white transition-colors"
+                            className="text-gray-200 hover:text-[#DBD2A4] transition-colors"
                         >
                             Versteigerung
                         </Link>
                         <Link 
                             to="/contact"
-                            className="text-gray-200 hover:text-white transition-colors"
+                            className="text-gray-200 hover:text-[#DBD2A4] transition-colors"
                         >
                             Kontakt
                         </Link>

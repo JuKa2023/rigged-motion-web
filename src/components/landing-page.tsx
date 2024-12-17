@@ -86,10 +86,7 @@ export function LandingPageComponent() {
             </p>
             <div className="flex justify-center space-x-4">
               <Link to="/auction">
-                <Button
-                  size="lg"
-                  className="bg-[#1E4959] hover:bg-[#2a6275] text-white"
-                >
+                <Button>
                   Aktuelle Auktionen <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
