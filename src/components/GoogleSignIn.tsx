@@ -20,8 +20,7 @@ const GoogleSignInComponent: React.FC<{ className?: string }> = ({ className }) 
     return (
         <Button 
             onClick={handleSignIn}
-            variant="outline"
-            className={`flex items-center gap-2 bg-white text-gray-800 hover:bg-gray-50 ${className}`}
+            variant="default"
         >
             <svg viewBox="0 0 24 24" className="h-5 w-5">
                 <path
