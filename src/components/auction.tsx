@@ -20,15 +20,15 @@ export function AuctionPageComponent() {
         className="fixed top-0 left-0 right-0 h-screen flex items-center justify-center text-center z-10 pointer-events-none"
         style={{ opacity: titleOpacity }}
       >
-        <div className="max-w-2xl mx-auto p-4 space-y-4">
-          <h1 className="text-4xl md:text-6xl font-bold text-white">
+        <div className="max-w-2xl mx-auto p-4 space-y-4 flex flex-col items-center justify-center text-center">
+          <h1 className="text-3xl md:text-5xl text-white">
             Ihr Produkt im
-            <span className="block text-[#DBD2A4]">
-              Galaktischen Rampenlicht
+            <span className=" text-[#DBD2A4] px-4">
+               Galaktischen Rampenlicht
             </span>
           </h1>
-          <p className="text-xl text-gray-300">
-            Sichern Sie sich einen exklusiven Werbeplatz in unserem viralen
+          <p className="text-3xl text-white">
+            Sichern Sie sich einen exklusiven Werbeplatz in unserem
             UFO-Video
           </p>
         </div>
@@ -48,8 +48,8 @@ export function AuctionPageComponent() {
               Dies könnte Ihr Produkt sein! Steigern Sie jetzt mit und werden
               Sie Teil unserer viralen Kampagne.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-              <div className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30">
                 <h4 className="font-semibold mb-2">
                   Professionelle Integration
                 </h4>
@@ -57,23 +57,23 @@ export function AuctionPageComponent() {
                   Ihr Produkt wird nahtlos in das Video eingebaut
                 </p>
               </div>
-              <div className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
+              <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30">
                 <h4 className="font-semibold mb-2">Maximale Reichweite</h4>
                 <p className="text-sm text-gray-300">
                   Viral Marketing auf allen Plattformen
                 </p>
               </div>
-              <div className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
+              <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30">
                 <h4 className="font-semibold mb-2">Exklusiver Spot</h4>
                 <p className="text-sm text-gray-300">
                   Limitierte Verfügbarkeit sichert Ihre Einzigartigkeit
                 </p>
               </div>
             </div>
-            <div className="mt-12 space-y-4">
+            <div className="space-y-4 text-center">
               <h4 className="text-xl font-semibold text-white">Ablauf</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                <div className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
+                <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
                   <h5 className="font-semibold mb-2">
                     1. Teilnahme an der Auktion
                   </h5>
@@ -81,7 +81,7 @@ export function AuctionPageComponent() {
                     Sichern Sie sich den Platz durch Ihre Gebotsabgabe.
                   </p>
                 </div>
-                <div className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
+                <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
                   <h5 className="font-semibold mb-2">
                     2. Bereitstellung Ihrer Produktinformationen
                   </h5>
@@ -89,7 +89,7 @@ export function AuctionPageComponent() {
                     Teilen Sie uns alle notwendigen Assets und Details mit.
                   </p>
                 </div>
-                <div className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
+                <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
                   <h5 className="font-semibold mb-2">
                     3. Konzeption und Produktion
                   </h5>
@@ -97,7 +97,7 @@ export function AuctionPageComponent() {
                     Unser Team integriert Ihr Produkt in den Werbespot.
                   </p>
                 </div>
-                <div className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
+                <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
                   <h5 className="font-semibold mb-2">
                     4. Freigabe und Veröffentlichung
                   </h5>

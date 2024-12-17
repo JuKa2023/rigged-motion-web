@@ -128,7 +128,7 @@ export function ContactPageComponent() {
                 </div>
 
                 {/* Full-width Robot Animation */}
-                <div className="h-[400px] relative rounded-lg overflow-hidden backdrop-blur-sm bg-black/20 w-full">
+                <div className="h-[400px] relative rounded-lg overflow-hidden backdrop-blur-sm w-full">
                     <Canvas
                         camera={{ 
                             position: [0, 1, 5],
