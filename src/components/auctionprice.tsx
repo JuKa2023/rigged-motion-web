@@ -20,6 +20,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Auction {
   id: string;
@@ -47,12 +48,14 @@ interface ProductDimensions {
   length: number;
   width: number;
   height: number;
+  product_vision: string;
 }
 
 interface DimensionFormInputs {
   length: string;
   width: string;
   height: string;
+  product_vision: string;
 }
 
 const DIMENSION_LIMITS = {
@@ -223,6 +226,7 @@ export function Auctionpricecomponent() {
     length: "",
     width: "",
     height: "",
+    product_vision: ""
   });
 
   // Callback for auction updates
@@ -261,7 +265,7 @@ export function Auctionpricecomponent() {
       } = await supabase.auth.getUser();
       setUser(user);
       if (user) {
-        checkTermsAcceptance(user.id);
+        await checkTermsAcceptance(user.id);
       }
 
       // Fetch auction details
@@ -273,6 +277,25 @@ export function Auctionpricecomponent() {
 
       if (!auctionError && auctionData) {
         setAuction(auctionData);
+
+        // If we have both user and auction, check for existing preferences
+        if (user) {
+          const { data: preferencesData, error: preferencesError } = await supabase
+            .from("user_auction_preferences")
+            .select("*")
+            .eq("user_id", user.id)
+            .eq("auction_id", auctionData.id)
+            .single();
+
+          if (!preferencesError && preferencesData) {
+            setDimensions({
+              length: preferencesData.length,
+              width: preferencesData.width,
+              height: preferencesData.height,
+              product_vision: preferencesData.product_vision
+            });
+          }
+        }
 
         // Fetch initial bid history
         const { data: bidsData, error: bidsError } = await supabase
@@ -302,10 +325,10 @@ export function Auctionpricecomponent() {
   }, []);
 
   // Add function to check if dimensions are valid
-  const validateDimensions = (dims: DimensionFormInputs): boolean => {
-    const length = parseFloat(dims.length);
-    const width = parseFloat(dims.width);
-    const height = parseFloat(dims.height);
+  const validateInputs = (inputs: DimensionFormInputs): boolean => {
+    const length = parseFloat(inputs.length);
+    const width = parseFloat(inputs.width);
+    const height = parseFloat(inputs.height);
 
     if (
       isNaN(length) ||
@@ -337,19 +360,17 @@ export function Auctionpricecomponent() {
       );
       return false;
     }
+    if (!inputs.product_vision.trim()) {
+      setDimensionsError("Bitte geben Sie eine Produktbeschreibung ein");
+      return false;
+    }
     return true;
   };
 
-  // Modify checkTermsAcceptance to also check for dimensions
+  // Modify checkTermsAcceptance to also check for preferences
   const checkTermsAcceptance = async (userId: string) => {
     const { data: termsData, error: termsError } = await supabase
       .from("terms_acceptance")
-      .select("*")
-      .eq("user_id", userId)
-      .single();
-
-    const { data: dimensionsData, error: dimensionsError } = await supabase
-      .from("product_dimensions")
       .select("*")
       .eq("user_id", userId)
       .single();
@@ -358,52 +379,62 @@ export function Auctionpricecomponent() {
       setHasAcceptedTerms(true);
     }
 
-    if (!dimensionsError && dimensionsData) {
-      setDimensions({
-        length: dimensionsData.length,
-        width: dimensionsData.width,
-        height: dimensionsData.height,
-      });
+    if (auction) {
+      const { data: preferencesData, error: preferencesError } = await supabase
+        .from("user_auction_preferences")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("auction_id", auction.id)
+        .single();
+
+      if (!preferencesError && preferencesData) {
+        setDimensions({
+          length: preferencesData.length,
+          width: preferencesData.width,
+          height: preferencesData.height,
+          product_vision: preferencesData.product_vision
+        });
+      }
     }
   };
 
   // Add function to handle dimension submission
-  const handleDimensionSubmit = async (e: React.FormEvent) => {
+  const handlePreferencesSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user || !auction) return;
 
-    if (!validateDimensions(formInputs)) {
+    if (!validateInputs(formInputs)) {
       return;
     }
 
-    const newDimensions = {
+    const newPreferences = {
       length: parseFloat(formInputs.length),
       width: parseFloat(formInputs.width),
       height: parseFloat(formInputs.height),
+      product_vision: formInputs.product_vision.trim()
     };
 
-    const { error } = await supabase.from("product_dimensions").insert([
+    const { error } = await supabase.from("user_auction_preferences").insert([
       {
         user_id: user.id,
-        length: newDimensions.length,
-        width: newDimensions.width,
-        height: newDimensions.height,
+        auction_id: auction.id,
+        ...newPreferences
       },
     ]);
 
     if (!error) {
       setDimensionsError("");
-      setDimensions(newDimensions);
+      setDimensions(newPreferences);
     } else {
       setDimensionsError(
-        "Fehler beim Speichern der Abmessungen. Bitte versuchen Sie es erneut."
+        "Fehler beim Speichern der Präferenzen. Bitte versuchen Sie es erneut."
       );
     }
   };
 
   const handleInputChange =
     (field: keyof DimensionFormInputs) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setFormInputs((prev) => ({
         ...prev,
         [field]: e.target.value,
@@ -464,8 +495,8 @@ export function Auctionpricecomponent() {
     }
   }, [auction?.end_time]);
 
-  // Update handleBid to show confirmation dialog
-  const handleBid = () => {
+  // Update handleBid to check for preferences
+  const handleBid = async () => {
     if (!user) {
       setError("Bitte melden Sie sich an, um ein Gebot abzugeben");
       return;
@@ -478,6 +509,11 @@ export function Auctionpricecomponent() {
 
     if (!hasAcceptedTerms) {
       setError("Bitte akzeptieren Sie die Nutzungsbedingungen");
+      return;
+    }
+
+    if (!dimensions) {
+      setError("Bitte geben Sie zuerst Ihre Produktdetails ein");
       return;
     }
 
@@ -628,17 +664,14 @@ export function Auctionpricecomponent() {
                   {!dimensions ? (
                     <Card className="bg-black/40 p-4 space-y-4">
                       <h3 className="text-lg font-semibold text-[#DBD2A4]">
-                        Produktabmessungen
+                        Produktdetails
                       </h3>
                       <p className="text-sm text-white/90">
                         Bevor Sie ein Gebot abgeben können, geben Sie bitte die
-                        Abmessungen Ihres Produkts ein. Die maximalen
-                        Abmessungen betragen {DIMENSION_LIMITS.length.max}x
-                        {DIMENSION_LIMITS.width.max}x
-                        {DIMENSION_LIMITS.height.max} cm.
+                        Abmessungen und eine Beschreibung Ihres Produkts ein.
                       </p>
                       <form
-                        onSubmit={handleDimensionSubmit}
+                        onSubmit={handlePreferencesSubmit}
                         className="space-y-4"
                       >
                         <div className="grid grid-cols-3 gap-4">
@@ -688,6 +721,18 @@ export function Auctionpricecomponent() {
                             />
                           </div>
                         </div>
+                        <div>
+                          <label className="text-sm text-[#DBD2A4]">
+                            Produktbeschreibung
+                          </label>
+                          <Textarea
+                            value={formInputs.product_vision}
+                            onChange={handleInputChange("product_vision")}
+                            placeholder="Beschreiben Sie Ihr Produkt und wie Sie es in der Animation präsentiert sehen möchten..."
+                            required
+                            className="mt-1 min-h-[100px] bg-white/95 border-[#DBD2A4]/30 focus:border-[#DBD2A4]/60"
+                          />
+                        </div>
                         {dimensionsError && (
                           <Alert variant="destructive">
                             <AlertCircle className="h-4 w-4" />
@@ -700,7 +745,7 @@ export function Auctionpricecomponent() {
                           type="submit"
                           className="w-full bg-[#1E4959] hover:bg-[#2a6275] text-white"
                         >
-                          Abmessungen bestätigen
+                          Details bestätigen
                         </Button>
                       </form>
                     </Card>
@@ -711,7 +756,7 @@ export function Auctionpricecomponent() {
                       </h3>
                       <div className="rounded-md border border-[#DBD2A4]/20 p-4 mb-4">
                         <h4 className="text-md font-medium text-[#DBD2A4] mb-2">
-                          Ihre Produktabmessungen
+                          Ihre Produktdetails
                         </h4>
                         <p className="text-sm text-white/90">
                           Länge: {dimensions.length} cm
@@ -720,6 +765,14 @@ export function Auctionpricecomponent() {
                           <br />
                           Höhe: {dimensions.height} cm
                         </p>
+                        <div className="mt-4">
+                          <h4 className="text-md font-medium text-[#DBD2A4] mb-2">
+                            Ihre Vision
+                          </h4>
+                          <p className="text-sm text-white/90">
+                            {dimensions.product_vision}
+                          </p>
+                        </div>
                       </div>
                       <ScrollArea className="h-40 rounded-md border border-[#DBD2A4]/20 p-4">
                         <div className="text-sm text-white/90">

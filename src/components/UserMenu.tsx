@@ -33,9 +33,9 @@ export function UserMenu({ user }: UserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none">
-        <Avatar className="h-9 w-9 ring-2 ring-[#1E4959] hover:ring-[#DBD2A4] transition-colors">
-          <AvatarImage src={userImage} />
-          <AvatarFallback className="bg-[#1E4959]/20 backdrop-blur-sm text-white">
+        <Avatar className="h-9 w-9 ring-2 ring-[#1E4959] hover:ring-[#DBD2A4] transition-colors bg-transparent rounded-full overflow-hidden">
+          <AvatarImage src={userImage} className="rounded-full" />
+          <AvatarFallback className="flex items-center justify-center h-full w-full bg-[#1E4959]/20 backdrop-blur-sm text-white rounded-full">
             {userInitials}
           </AvatarFallback>
         </Avatar>

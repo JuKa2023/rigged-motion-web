@@ -1,143 +1,302 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/supabaseClient";
+import { supabase } from "../supabaseClient";
+import { User } from "@supabase/supabase-js";
 import { Card } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronUp, Package2, Timer } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { motion, AnimatePresence } from "framer-motion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-interface UserBid {
+interface AuctionDetails {
+  id: string;
+  title: string;
+  current_price: number;
+  end_time: string;
+}
+
+interface Bid {
   id: string;
   amount: number;
   created_at: string;
-  auction: {
-    id: string;
-    title: string;
-    current_price: number;
-    end_time: string;
-  };
-  is_winning: boolean;
+  auction: AuctionDetails;
 }
 
-interface GroupedBids {
-  [auctionId: string]: {
-    auctionTitle: string;
-    endTime: string;
-    currentPrice: number;
-    bids: UserBid[];
-    isExpanded: boolean;
-  };
-}
-
-interface UserDimensions {
+interface Preference {
+  id: string;
   length: number;
   width: number;
   height: number;
+  product_vision: string;
   created_at: string;
+  auction: AuctionDetails;
 }
 
+interface GroupedAuctionData {
+  auctionId: string;
+  title: string;
+  currentPrice: number;
+  endTime: string;
+  bids: {
+    id: string;
+    amount: number;
+    created_at: string;
+  }[];
+  preference?: {
+    length: number;
+    width: number;
+    height: number;
+    product_vision: string;
+    created_at: string;
+  };
+}
+
+const AuctionHistoryCard = ({ auction, isExpanded, onToggle }: {
+  auction: GroupedAuctionData;
+  isExpanded: boolean;
+  onToggle: () => void;
+}) => {
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("de-CH", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const isActive = new Date(auction.endTime) > new Date();
+
+  return (
+    <Card className="bg-black/40 border-[#DBD2A4]/20 p-4 space-y-4">
+      <div 
+        className="flex items-center justify-between cursor-pointer"
+        onClick={onToggle}
+      >
+        <div className="flex items-center gap-4">
+          <div className={`p-2 rounded-full ${isActive ? 'bg-green-500/20' : 'bg-gray-500/20'}`}>
+            <Timer className={isActive ? 'text-green-400' : 'text-gray-400'} />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-[#DBD2A4]">{auction.title}</h3>
+            <p className="text-sm text-gray-400">
+              {isActive ? 'Aktiv bis' : 'Beendet am'} {formatDateTime(auction.endTime)}
+            </p>
+          </div>
+        </div>
+        <Button variant="ghost" size="icon">
+          {isExpanded ? <ChevronUp /> : <ChevronDown />}
+        </Button>
+      </div>
+
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <Separator className="my-4" />
+            
+            {auction.preference && (
+              <div className="mb-6 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Package2 className="text-[#DBD2A4]" />
+                  <h4 className="text-md font-medium text-[#DBD2A4]">Produktdetails</h4>
+                </div>
+                <Card className="bg-black/20 border-[#DBD2A4]/10 p-4">
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <p className="text-sm text-gray-400">Länge</p>
+                      <p className="text-lg font-medium text-white">{auction.preference.length} cm</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400">Breite</p>
+                      <p className="text-lg font-medium text-white">{auction.preference.width} cm</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400">Höhe</p>
+                      <p className="text-lg font-medium text-white">{auction.preference.height} cm</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">Produktvision</p>
+                    <p className="text-white mt-1 whitespace-pre-wrap break-words">
+                      {auction.preference.product_vision}
+                    </p>
+                  </div>
+                </Card>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <h4 className="text-md font-medium text-[#DBD2A4]">Gebote</h4>
+              <ScrollArea className="h-[200px]">
+                <div className="space-y-2">
+                  {auction.bids.map((bid) => (
+                    <div
+                      key={bid.id}
+                      className="flex items-center justify-between p-3 rounded-lg bg-black/20 border border-[#DBD2A4]/10"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant="secondary"
+                          className={bid.amount === auction.currentPrice ? "bg-green-500/10 text-green-400" : ""}
+                        >
+                          {bid.amount === auction.currentPrice ? "Höchstgebot" : "Gebot"}
+                        </Badge>
+                        <span className="text-gray-400 text-sm">
+                          {formatDateTime(bid.created_at)}
+                        </span>
+                      </div>
+                      <span className="text-lg font-medium text-white">
+                        CHF {bid.amount.toLocaleString()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Card>
+  );
+};
+
 export function ProfilePageComponent() {
-  const [userBids, setUserBids] = useState<GroupedBids>({});
-  const [dimensions, setDimensions] = useState<UserDimensions | null>(null);
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [auctions, setAuctions] = useState<GroupedAuctionData[]>([]);
+  const [expandedAuctionId, setExpandedAuctionId] = useState<string | null>(null);
 
   useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
     const fetchUserData = async () => {
-      try {
-        // Get current user
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-        setUser(user);
-
-        // Fetch user's dimensions
-        const { data: dimensionsData } = await supabase
-          .from('product_dimensions')
-          .select('*')
-          .eq('user_id', user.id)
-          .single();
-
-        if (dimensionsData) {
-          setDimensions(dimensionsData);
-        }
-
-        // Fetch user's bids with auction details
-        const { data: bidsData } = await supabase
-          .from('bids')
-          .select(`
+      // Fetch bids with auction details
+      const { data: bidsData } = await supabase
+        .from("bids")
+        .select(`
+          id,
+          amount,
+          created_at,
+          auction:auctions (
             id,
-            amount,
-            created_at,
-            auction:auctions (
-              id,
-              title,
-              current_price,
-              end_time
-            )
-          `)
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
+            title,
+            current_price,
+            end_time
+          )
+        `)
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
 
-        if (bidsData) {
-          // Group bids by auction
-          const grouped = (bidsData as unknown as UserBid[]).reduce((acc: GroupedBids, bid) => {
-            const auctionId = bid.auction.id;
-            if (!acc[auctionId]) {
-              acc[auctionId] = {
-                auctionTitle: bid.auction.title,
-                endTime: bid.auction.end_time,
-                currentPrice: bid.auction.current_price,
-                bids: [],
-                isExpanded: false
-              };
-            }
-            acc[auctionId].bids.push({
-              ...bid,
-              is_winning: bid.amount === bid.auction.current_price
+      // Fetch preferences with auction details
+      const { data: preferencesData } = await supabase
+        .from("user_auction_preferences")
+        .select(`
+          id,
+          length,
+          width,
+          height,
+          product_vision,
+          created_at,
+          auction:auctions (
+            id,
+            title,
+            current_price,
+            end_time
+          )
+        `)
+        .eq("user_id", user.id);
+
+      // Group data by auction
+      const auctionMap = new Map<string, GroupedAuctionData>();
+
+      // First, add all auctions from preferences
+      if (preferencesData) {
+        (preferencesData as any as Preference[]).forEach((pref) => {
+          if (!pref.auction) return;
+
+          const auctionId = pref.auction.id;
+          auctionMap.set(auctionId, {
+            auctionId,
+            title: pref.auction.title,
+            currentPrice: pref.auction.current_price || 0,
+            endTime: pref.auction.end_time || new Date().toISOString(),
+            bids: [],
+            preference: {
+              length: pref.length,
+              width: pref.width,
+              height: pref.height,
+              product_vision: pref.product_vision,
+              created_at: pref.created_at,
+            },
+          });
+        });
+      }
+
+      // Then add bids to existing auctions or create new ones
+      if (bidsData) {
+        (bidsData as any as Bid[]).forEach((bid) => {
+          if (!bid.auction) return;
+
+          const auctionId = bid.auction.id;
+          if (!auctionMap.has(auctionId)) {
+            auctionMap.set(auctionId, {
+              auctionId,
+              title: bid.auction.title,
+              currentPrice: bid.auction.current_price,
+              endTime: bid.auction.end_time,
+              bids: [],
             });
-            return acc;
-          }, {});
-          setUserBids(grouped);
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      } finally {
-        setIsLoading(false);
+          }
+
+          const auction = auctionMap.get(auctionId)!;
+          auction.bids.push({
+            id: bid.id,
+            amount: bid.amount,
+            created_at: bid.created_at,
+          });
+          // Sort bids by amount in descending order
+          auction.bids.sort((a, b) => b.amount - a.amount);
+        });
+      }
+
+      // Convert map to array and sort by end time
+      const sortedAuctions = Array.from(auctionMap.values()).sort((a, b) => 
+        new Date(b.endTime).getTime() - new Date(a.endTime).getTime()
+      );
+
+      setAuctions(sortedAuctions);
+      // Expand the first auction by default if there are any
+      if (sortedAuctions.length > 0) {
+        setExpandedAuctionId(sortedAuctions[0].auctionId);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [user]);
 
-  const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString('de-CH', {
-      day: '2-digit',
-      month: '2-digit',
-      year: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const toggleAuctionExpand = (auctionId: string) => {
-    setUserBids(prev => ({
-      ...prev,
-      [auctionId]: {
-        ...prev[auctionId],
-        isExpanded: !prev[auctionId].isExpanded
-      }
-    }));
-  };
-
-  const isAuctionActive = (endTime: string) => {
-    return new Date(endTime) > new Date();
-  };
-
-  if (isLoading) {
+  if (!user) {
     return (
       <div className="min-h-screen bg-[#0a001f] flex items-center justify-center">
-        <div className="text-white">Laden...</div>
+        <Card className="bg-black/40 border-[#DBD2A4]/20 p-8 text-center">
+          <p className="text-gray-400">Bitte melden Sie sich an, um Ihre Auktionen zu sehen.</p>
+        </Card>
       </div>
     );
   }
@@ -150,7 +309,7 @@ export function ProfilePageComponent() {
         style={{ mixBlendMode: "color-dodge" }}
       />
 
-      <main className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <main className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         {/* Profile Header */}
         <div className="mb-12">
           <div className="flex items-center gap-6">
@@ -172,159 +331,29 @@ export function ProfilePageComponent() {
           </div>
         </div>
 
-        {/* Content Tabs */}
-        <Tabs defaultValue="bids" className="space-y-6">
-          <TabsList className="bg-black/20 border border-[#1E4959]/30">
-            <TabsTrigger
-              value="bids"
-              className="data-[state=active]:bg-[#1E4959] data-[state=active]:text-white"
-            >
-              Meine Gebote
-            </TabsTrigger>
-            <TabsTrigger
-              value="dimensions"
-              className="data-[state=active]:bg-[#1E4959] data-[state=active]:text-white"
-            >
-              Produktabmessungen
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="bids">
-            <Card className="bg-black/20 border-[#1E4959]/30 p-6">
-              <h2 className="text-xl font-semibold text-[#DBD2A4] mb-4">
-                Auktionsübersicht
-              </h2>
-              <ScrollArea className="h-[500px] pr-4">
-                <div className="space-y-4">
-                  {Object.entries(userBids).length > 0 ? (
-                    Object.entries(userBids).map(([auctionId, auction]) => (
-                      <div
-                        key={auctionId}
-                        className="bg-black/40 rounded-lg border border-[#1E4959]/30 overflow-hidden"
-                      >
-                        {/* Auction Header */}
-                        <div
-                          className="p-4 cursor-pointer hover:bg-[#1E4959]/20 transition-colors"
-                          onClick={() => toggleAuctionExpand(auctionId)}
-                        >
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-white font-medium">
-                                  {auction.auctionTitle}
-                                </h3>
-                                {isAuctionActive(auction.endTime) ? (
-                                  <Badge className="bg-green-500/10 text-green-400">
-                                    Aktiv
-                                  </Badge>
-                                ) : (
-                                  <Badge className="bg-gray-500/10 text-gray-400">
-                                    Beendet
-                                  </Badge>
-                                )}
-                              </div>
-                              <p className="text-sm text-gray-400 mt-1">
-                                Endet am: {formatDateTime(auction.endTime)}
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <div className="text-right">
-                                <p className="text-sm text-gray-400">
-                                  Aktueller Preis
-                                </p>
-                                <p className="text-lg font-bold text-white">
-                                  CHF {auction.currentPrice.toLocaleString()}
-                                </p>
-                              </div>
-                              {auction.isExpanded ? (
-                                <ChevronUp className="h-5 w-5 text-gray-400" />
-                              ) : (
-                                <ChevronDown className="h-5 w-5 text-gray-400" />
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Bid History */}
-                        {auction.isExpanded && (
-                          <div className="border-t border-[#1E4959]/30">
-                            <div className="p-4 space-y-3">
-                              {auction.bids.map((bid) => (
-                                <div
-                                  key={bid.id}
-                                  className="flex justify-between items-center py-2 px-4 rounded-lg bg-black/20"
-                                >
-                                  <div>
-                                    <div className="flex items-center gap-2">
-                                      {bid.is_winning && (
-                                        <Badge className="bg-green-500/10 text-green-400">
-                                          Höchstgebot
-                                        </Badge>
-                                      )}
-                                      <span className="text-gray-400 text-sm">
-                                        {formatDateTime(bid.created_at)}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <span className="text-lg font-medium text-white">
-                                    CHF {bid.amount.toLocaleString()}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-center text-gray-400 py-8">
-                      Sie haben noch keine Gebote abgegeben.
-                    </p>
+        {/* Auctions List */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-[#DBD2A4] mb-6">Meine Auktionen</h2>
+          
+          {auctions.length === 0 ? (
+            <Card className="bg-black/40 border-[#DBD2A4]/20 p-8 text-center">
+              <p className="text-gray-400">Sie haben noch keine Gebote abgegeben.</p>
+            </Card>
+          ) : (
+            <div className="space-y-4">
+              {auctions.map((auction) => (
+                <AuctionHistoryCard
+                  key={auction.auctionId}
+                  auction={auction}
+                  isExpanded={expandedAuctionId === auction.auctionId}
+                  onToggle={() => setExpandedAuctionId(
+                    expandedAuctionId === auction.auctionId ? null : auction.auctionId
                   )}
-                </div>
-              </ScrollArea>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="dimensions">
-            <Card className="bg-black/20 border-[#1E4959]/30 p-6">
-              <h2 className="text-xl font-semibold text-[#DBD2A4] mb-4">
-                Ihre Produktabmessungen
-              </h2>
-              {dimensions ? (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-black/40 rounded-lg p-4 border border-[#1E4959]/30">
-                      <p className="text-[#DBD2A4] text-sm mb-1">Länge</p>
-                      <p className="text-2xl font-bold text-white">
-                        {dimensions.length} cm
-                      </p>
-                    </div>
-                    <div className="bg-black/40 rounded-lg p-4 border border-[#1E4959]/30">
-                      <p className="text-[#DBD2A4] text-sm mb-1">Breite</p>
-                      <p className="text-2xl font-bold text-white">
-                        {dimensions.width} cm
-                      </p>
-                    </div>
-                    <div className="bg-black/40 rounded-lg p-4 border border-[#1E4959]/30">
-                      <p className="text-[#DBD2A4] text-sm mb-1">Höhe</p>
-                      <p className="text-2xl font-bold text-white">
-                        {dimensions.height} cm
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-400">
-                    Festgelegt am: {formatDateTime(dimensions.created_at)}
-                  </p>
-                </div>
-              ) : (
-                <p className="text-center text-gray-400 py-8">
-                  Sie haben noch keine Produktabmessungen festgelegt.
-                </p>
-              )}
-            </Card>
-          </TabsContent>
-        </Tabs>
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );
