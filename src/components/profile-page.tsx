@@ -81,7 +81,7 @@ export function ProfilePageComponent() {
 
         if (bidsData) {
           // Group bids by auction
-          const grouped = (bidsData as UserBid[]).reduce((acc: GroupedBids, bid) => {
+          const grouped = (bidsData as unknown as UserBid[]).reduce((acc: GroupedBids, bid) => {
             const auctionId = bid.auction.id;
             if (!acc[auctionId]) {
               acc[auctionId] = {
