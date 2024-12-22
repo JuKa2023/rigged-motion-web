@@ -11,17 +11,17 @@ INSERT INTO auctions (
     product_details
 ) VALUES (
     'Premium Advertising Spot',
-    'Secure your product''s place in our next galactic marketing campaign. Your product will be featured in a stunning 3D animation that will capture attention across the universe.',
+    'Sichere dir einen Platz für dein Produkt in unserer nächsten galaktischen Marketingkampagne. Dein Produkt wird in einer atemberaubenden 3D-Animation vorgestellt, die im ganzen Universum für Aufmerksamkeit sorgen wird.',
     1000.00,
     100.00,
     CURRENT_TIMESTAMP + INTERVAL '7 days',
     true,
-    'Galaxy Marketing Package',
+    'Galaxy Marketing-Paket',
     'https://images.unsplash.com/photo-1534996858221-380b92700493?auto=format&fit=crop&q=80',
-    'This premium advertising package includes:
-    - 30-second 3D animated commercial
-    - Prime placement in our next campaign
-    - Social media promotion
+    'Dieses Premium-Werbepaket umfasst:
+    - 30-Sekunden 3D animierter Werbespot
+    - Erstklassige Platzierung in der nächsten Kampagne
+    - Werbung in den sozialen Medien
     - Behind-the-scenes content
     - Professional product photography
     - Marketing analytics report'

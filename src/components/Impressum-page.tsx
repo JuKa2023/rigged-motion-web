@@ -24,8 +24,8 @@ export function ImpressumPageComponent() {
                     <div className="space-y-6 text-white">
                         <div>
                             <p className="text-[#DBD2A4] font-medium mb-1">Adresse</p>
-                            <p>Holzikofenweg 8</p>
-                            <p>3007 Bern</p>
+                            <p>Breitenrainpl. 29</p>
+                            <p>3014 Bern</p>
                             <p>Schweiz</p>
                         </div>
 

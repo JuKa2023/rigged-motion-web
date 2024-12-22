@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import Productpotogrtapohy1jpg from '/assets/productPhotography_placeholder1.jpg'
-import Productpotogrtapohy2jpg from '/assets/productPhotography_placeholer2.jpg'
-import Productpotogrtapohy3jpg from '/assets/productPhotography_placeholder3.jpg'
+import productPhotography1png from '/assets/versteigerung/product_chocolate.png'
+import productPhotography2png from '/assets/versteigerung/product_gift.png'
+import productPhotography3png from '/assets/versteigerung/product_phone.png'
+import UfoImageOhne from '/assets/ufo_versteigerung_ohne.png'
 
 export function UfoBeam() {
     const [stars, setStars] = useState<{ x: number; y: number; delay: number }[]>([])
@@ -41,7 +42,7 @@ export function UfoBeam() {
 
             {/* UFO */}
             <motion.div
-                className="sticky top-20 w-full h-40 flex justify-center z-20"
+                className="sticky top-20 w-full h-40 flex justify-center z-7"
                 animate={{ y: [0, -10, 0] }}
                 transition={{
                     duration: 4,
@@ -49,34 +50,21 @@ export function UfoBeam() {
                     ease: "easeInOut",
                 }}
             >
-                <div className="relative w-64 h-32">
-                    {/* UFO Body */}
-                    <div className="absolute w-full h-16 bg-gradient-to-b from-gray-700 to-gray-900 rounded-full bottom-0 backdrop-blur-lg border border-gray-600">
-                        <div className="absolute inset-x-0 -top-2 h-4 bg-gradient-to-b from-blue-400 to-transparent rounded-full opacity-50" />
-                    </div>
-                    {/* UFO Top */}
-                    <div className="absolute w-32 h-16 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full left-1/2 -translate-x-1/2 top-0 border border-gray-500">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/20 to-transparent" />
-                    </div>
-                    {/* UFO Lights */}
-                    {[...Array(5)].map((_, i) => (
-                        <motion.div
-                            key={i}
-                            className="absolute bottom-2 w-3 h-3 bg-blue-400 rounded-full"
-                            style={{ 
-                                left: `${20 + i * 15}%`,
-                                boxShadow: '0 0 10px rgba(96, 165, 250, 0.8)'
-                            }}
-                            animate={{ 
-                                opacity: [0.4, 1, 0.4]
-                            }}
-                            transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                delay: i * 0.3,
-                            }}
-                        />
-                    ))}
+                <div className="relative w-640 h-auto">
+                    <motion.img
+                        src={UfoImageOhne}
+                        alt="UFO Image"
+                        className="w-640 h-auto object-contain"
+                        animate={{
+                            rotate: [0, 5, -5, 0],
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                        }}
+
+                    />
                 </div>
             </motion.div>
 
@@ -107,7 +95,7 @@ export function UfoBeam() {
                     >
                         <div className="w-full h-full">
                             <img
-                                src={Productpotogrtapohy1jpg}
+                                src={productPhotography1png}
                                 alt="Product Photography Placeholder 1"
                                 className="w-full h-full object-cover"
                             />
@@ -130,7 +118,7 @@ export function UfoBeam() {
                     >
                         <div className="w-full h-full">
                             <img
-                                src={Productpotogrtapohy2jpg}
+                                src={productPhotography2png}
                                 alt="Product Photography 2"
                                 className="w-full h-full object-cover"
                             />
@@ -153,7 +141,7 @@ export function UfoBeam() {
                     >
                         <div className="w-full h-full">
                             <img
-                                src={Productpotogrtapohy3jpg}
+                                src={productPhotography3png}
                                 alt="Product Photography 3"
                                 className="w-full h-full object-cover"
                             />
@@ -163,4 +151,4 @@ export function UfoBeam() {
             </div>
         </div>
     )
-} 
+}

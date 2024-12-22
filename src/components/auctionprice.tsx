@@ -382,7 +382,7 @@ export function Auctionpricecomponent() {
       }}
       className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-16 space-y-16"
     >
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/60" />
       
       <div className="relative z-10 w-full max-w-7xl mx-auto space-y-12">
         {/* Timer Section */}
@@ -404,7 +404,7 @@ export function Auctionpricecomponent() {
               muted
               loop
               playsInline
-              src="/assets/ufo-video.mp4"
+              src="/assets/versteigerung/ufo_video.mp4"
               poster="/assets/productPhotography_placeholder1.jpg"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />

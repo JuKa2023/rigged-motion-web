@@ -58,13 +58,13 @@ export function ContactPageComponent() {
 
             <main className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
                 <div className="text-center mb-16">
-                    <h1 className="text-5xl sm:text-6xl font-bold mb-4">
-                        <span className="text-white">Lassen Sie uns</span>{" "}
-                        <span className="text-[#DBD2A4]">zusammenarbeiten</span>
+                    <h1 className="text-5xl sm:text-4xl font-bold mb-4">
+                        <span className="text-white text-6xl">Bewege</span>{" "}
+                        <span className="text-[#DBD2A4]">etwas mit uns!</span>
                     </h1>
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                        Erzählen Sie uns von Ihrem Projekt und lassen Sie uns gemeinsam
-                        Ihre Vision zum Leben erwecken
+                        Erzähle uns von deinem Projekt und lasse uns gemeinsam
+                        deine Vision zum Leben erwecken
                     </p>
                 </div>
 
