@@ -9,6 +9,7 @@ import { FooterComponent } from "@/components/footer";
 import { AuctionPageComponent } from "@/components/auction.tsx";
 import { AuthProvider } from "@/contexts/AuthContext";
 import PrivacyPolicy from "@/components/privacy-policy";
+import { ProfilePageComponent } from "@/components/profile-page";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/auction" element={<AuctionPageComponent />} />
             <Route path="/impressum" element={<ImpressumPageComponent />} />
             <Route path="/datenschutz" element={<PrivacyPolicy />} />
+            <Route path="/profile" element={<ProfilePageComponent />} />
             <Route path="*" element={<div>404</div>} />
           </Routes>
           <FooterComponent />
