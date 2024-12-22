@@ -109,6 +109,35 @@ function useAuctionSubscription(onAuctionUpdate: (auction: Auction) => void) {
 
 // Update the bid history component with Shadcn components
 const AnimatedBidHistory = ({ bids, user }: { bids: Bid[], user: User | null }) => {
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    // Format date based on when it occurred
+    let dateText;
+    if (date.toDateString() === today.toDateString()) {
+      dateText = "Heute";
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      dateText = "Gestern";
+    } else {
+      dateText = date.toLocaleDateString('de-CH', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit'
+      });
+    }
+
+    // Get time
+    const time = date.toLocaleTimeString('de-CH', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    return `${dateText}, ${time}`;
+  };
+
   return (
     <ScrollArea className="h-[300px] pr-4">
       <div className="space-y-3">
@@ -143,7 +172,7 @@ const AnimatedBidHistory = ({ bids, user }: { bids: Bid[], user: User | null }) 
                 </span>
               </div>
               <div className="mt-2 text-sm text-gray-400">
-                {new Date(bid.created_at).toLocaleTimeString()}
+                {formatDateTime(bid.created_at)}
               </div>
             </motion.div>
           ))}
