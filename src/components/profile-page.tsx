@@ -147,7 +147,7 @@ export function ProfilePageComponent() {
       {/* Gradient Overlay */}
       <div
         className="absolute inset-0 bg-gradient-to-br from-[#1E4959]/30 via-[#0a001f]/60 to-[#DBD2A4]/20"
-        style={{ mixBlendMode: 'color-dodge' }}
+        style={{ mixBlendMode: "color-dodge" }}
       />
 
       <main className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
@@ -162,10 +162,11 @@ export function ProfilePageComponent() {
             </Avatar>
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">
-                {user?.email}
+                {user.user_metadata?.full_name || user.email}
               </h1>
               <p className="text-[#DBD2A4]">
-                Mitglied seit {new Date(user?.created_at).toLocaleDateString('de-CH')}
+                Mitglied seit{" "}
+                {new Date(user?.created_at).toLocaleDateString("de-CH")}
               </p>
             </div>
           </div>
@@ -174,13 +175,13 @@ export function ProfilePageComponent() {
         {/* Content Tabs */}
         <Tabs defaultValue="bids" className="space-y-6">
           <TabsList className="bg-black/20 border border-[#1E4959]/30">
-            <TabsTrigger 
+            <TabsTrigger
               value="bids"
               className="data-[state=active]:bg-[#1E4959] data-[state=active]:text-white"
             >
               Meine Gebote
             </TabsTrigger>
-            <TabsTrigger 
+            <TabsTrigger
               value="dimensions"
               className="data-[state=active]:bg-[#1E4959] data-[state=active]:text-white"
             >
@@ -190,7 +191,9 @@ export function ProfilePageComponent() {
 
           <TabsContent value="bids">
             <Card className="bg-black/20 border-[#1E4959]/30 p-6">
-              <h2 className="text-xl font-semibold text-[#DBD2A4] mb-4">Auktionsübersicht</h2>
+              <h2 className="text-xl font-semibold text-[#DBD2A4] mb-4">
+                Auktionsübersicht
+              </h2>
               <ScrollArea className="h-[500px] pr-4">
                 <div className="space-y-4">
                   {Object.entries(userBids).length > 0 ? (
@@ -200,14 +203,16 @@ export function ProfilePageComponent() {
                         className="bg-black/40 rounded-lg border border-[#1E4959]/30 overflow-hidden"
                       >
                         {/* Auction Header */}
-                        <div 
+                        <div
                           className="p-4 cursor-pointer hover:bg-[#1E4959]/20 transition-colors"
                           onClick={() => toggleAuctionExpand(auctionId)}
                         >
                           <div className="flex justify-between items-start">
                             <div>
                               <div className="flex items-center gap-2">
-                                <h3 className="text-white font-medium">{auction.auctionTitle}</h3>
+                                <h3 className="text-white font-medium">
+                                  {auction.auctionTitle}
+                                </h3>
                                 {isAuctionActive(auction.endTime) ? (
                                   <Badge className="bg-green-500/10 text-green-400">
                                     Aktiv
@@ -224,7 +229,9 @@ export function ProfilePageComponent() {
                             </div>
                             <div className="flex items-center gap-2">
                               <div className="text-right">
-                                <p className="text-sm text-gray-400">Aktueller Preis</p>
+                                <p className="text-sm text-gray-400">
+                                  Aktueller Preis
+                                </p>
                                 <p className="text-lg font-bold text-white">
                                   CHF {auction.currentPrice.toLocaleString()}
                                 </p>
@@ -281,21 +288,29 @@ export function ProfilePageComponent() {
 
           <TabsContent value="dimensions">
             <Card className="bg-black/20 border-[#1E4959]/30 p-6">
-              <h2 className="text-xl font-semibold text-[#DBD2A4] mb-4">Ihre Produktabmessungen</h2>
+              <h2 className="text-xl font-semibold text-[#DBD2A4] mb-4">
+                Ihre Produktabmessungen
+              </h2>
               {dimensions ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
                     <div className="bg-black/40 rounded-lg p-4 border border-[#1E4959]/30">
                       <p className="text-[#DBD2A4] text-sm mb-1">Länge</p>
-                      <p className="text-2xl font-bold text-white">{dimensions.length} cm</p>
+                      <p className="text-2xl font-bold text-white">
+                        {dimensions.length} cm
+                      </p>
                     </div>
                     <div className="bg-black/40 rounded-lg p-4 border border-[#1E4959]/30">
                       <p className="text-[#DBD2A4] text-sm mb-1">Breite</p>
-                      <p className="text-2xl font-bold text-white">{dimensions.width} cm</p>
+                      <p className="text-2xl font-bold text-white">
+                        {dimensions.width} cm
+                      </p>
                     </div>
                     <div className="bg-black/40 rounded-lg p-4 border border-[#1E4959]/30">
                       <p className="text-[#DBD2A4] text-sm mb-1">Höhe</p>
-                      <p className="text-2xl font-bold text-white">{dimensions.height} cm</p>
+                      <p className="text-2xl font-bold text-white">
+                        {dimensions.height} cm
+                      </p>
                     </div>
                   </div>
                   <p className="text-sm text-gray-400">
