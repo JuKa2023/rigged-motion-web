@@ -43,72 +43,112 @@ interface Bid {
   user_email?: string;
 }
 
+interface ProductDimensions {
+  length: number;
+  width: number;
+  height: number;
+}
+
+interface DimensionFormInputs {
+  length: string;
+  width: string;
+  height: string;
+}
+
+const DIMENSION_LIMITS = {
+  length: { min: 1, max: 50 }, // cm
+  width: { min: 1, max: 50 }, // cm
+  height: { min: 1, max: 30 }, // cm
+};
+
 // Custom hook for real-time auction updates
-function useAuctionSubscription(onAuctionUpdate: (auction: Auction) => void) {
+function useAuctionSubscription(onAuctionUpdate: (auction: Auction) => void, onNewBid: (bid: Bid) => void) {
   useEffect(() => {
     // Create and subscribe to the channel
-    const channel = supabase.channel('auction-channel', {
+    const channel = supabase.channel("auction-channel", {
       config: {
-        broadcast: { self: true }
-      }
+        broadcast: { self: true },
+      },
     });
 
     // Subscribe to auction updates
     channel
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'auctions',
-          filter: 'is_active=eq.true'
+          event: "*",
+          schema: "public",
+          table: "auctions",
+          filter: "is_active=eq.true",
         },
         (payload) => {
-          console.log('Auction change received:', payload);
+          console.log("Auction change received:", payload);
           if (payload.new) {
             onAuctionUpdate(payload.new as Auction);
           }
         }
       )
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'bids'
+          event: "INSERT",
+          schema: "public",
+          table: "bids",
         },
         (payload) => {
-          console.log('New bid received:', payload);
-          // Fetch latest auction data
-          fetchLatestAuction();
+          console.log("New bid received:", payload);
+          if (payload.new) {
+            onNewBid(payload.new as Bid);
+          }
         }
       )
       .subscribe((status) => {
-        console.log('Subscription status:', status);
+        console.log("Subscription status:", status);
       });
 
-    // Helper function to fetch latest auction data
-    const fetchLatestAuction = async () => {
-      const { data, error } = await supabase
-        .from('auctions')
-        .select('*')
-        .eq('is_active', true)
-        .single();
-
-      if (!error && data) {
-        onAuctionUpdate(data);
-      }
-    };
-
-    // Cleanup subscription
     return () => {
       channel.unsubscribe();
     };
-  }, [onAuctionUpdate]);
+  }, [onAuctionUpdate, onNewBid]);
 }
 
 // Update the bid history component with Shadcn components
-const AnimatedBidHistory = ({ bids, user }: { bids: Bid[], user: User | null }) => {
+const AnimatedBidHistory = ({
+  bids,
+  user,
+}: {
+  bids: Bid[];
+  user: User | null;
+}) => {
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    // Format date based on when it occurred
+    let dateText;
+    if (date.toDateString() === today.toDateString()) {
+      dateText = "Heute";
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      dateText = "Gestern";
+    } else {
+      dateText = date.toLocaleDateString("de-CH", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+      });
+    }
+
+    // Get time
+    const time = date.toLocaleTimeString("de-CH", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    return `${dateText}, ${time}`;
+  };
+
   return (
     <ScrollArea className="h-[300px] pr-4">
       <div className="space-y-3">
@@ -121,19 +161,26 @@ const AnimatedBidHistory = ({ bids, user }: { bids: Bid[], user: User | null }) 
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
               className={`
-                ${bid.user_id === user?.id ? 'bg-[#1E4959]' : 'bg-black/40'} 
+                ${bid.user_id === user?.id ? "bg-[#1E4959]" : "bg-black/40"} 
                 rounded-lg p-4 border border-[#DBD2A4]/20 shadow-md
                 transform transition-all duration-200 hover:border-[#DBD2A4]/40
               `}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`} />
+                  <div
+                    className={`h-2 w-2 rounded-full ${
+                      index === 0 ? "bg-green-400 animate-pulse" : "bg-gray-400"
+                    }`}
+                  />
                   <span className="text-[#DBD2A4] font-medium">
-                    {bid.user_id === user?.id ? 'Ihr Gebot' : 'Neues Gebot'}
+                    {bid.user_id === user?.id ? "Ihr Gebot" : "Neues Gebot"}
                   </span>
                   {index === 0 && (
-                    <Badge variant="secondary" className="bg-green-500/10 text-green-400 ml-2">
+                    <Badge
+                      variant="secondary"
+                      className="bg-green-500/10 text-green-400 ml-2"
+                    >
                       Höchstgebot
                     </Badge>
                   )}
@@ -143,7 +190,7 @@ const AnimatedBidHistory = ({ bids, user }: { bids: Bid[], user: User | null }) 
                 </span>
               </div>
               <div className="mt-2 text-sm text-gray-400">
-                {new Date(bid.created_at).toLocaleTimeString()}
+                {formatDateTime(bid.created_at)}
               </div>
             </motion.div>
           ))}
@@ -157,7 +204,12 @@ export function Auctionpricecomponent() {
   const [auction, setAuction] = useState<Auction | null>(null);
   const [bids, setBids] = useState<Bid[]>([]);
   const [bidAmount, setBidAmount] = useState<string>("");
-  const [timeLeft, setTimeLeft] = useState<{days: number; hours: number; minutes: number; seconds: number} | null>(null);
+  const [timeLeft, setTimeLeft] = useState<{
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(null);
   const [error, setError] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -165,52 +217,199 @@ export function Auctionpricecomponent() {
   const [isHighestBidder, setIsHighestBidder] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingBidAmount, setPendingBidAmount] = useState<number | null>(null);
+  const [dimensions, setDimensions] = useState<ProductDimensions | null>(null);
+  const [dimensionsError, setDimensionsError] = useState<string>("");
+  const [formInputs, setFormInputs] = useState<DimensionFormInputs>({
+    length: "",
+    width: "",
+    height: "",
+  });
 
   // Callback for auction updates
   const handleAuctionUpdate = useCallback((newAuction: Auction) => {
-    console.log('Updating auction state:', newAuction);
+    console.log("Updating auction state:", newAuction);
     setAuction(newAuction);
   }, []);
 
-  // Use the custom hook
-  useAuctionSubscription(handleAuctionUpdate);
+  // Add callback for new bids
+  const handleNewBid = useCallback((newBid: Bid) => {
+    setBids(prevBids => {
+      // Add new bid to the start of the array and keep only the last 5
+      const updatedBids = [newBid, ...prevBids].slice(0, 5);
+      
+      // Update highest bidder status immediately if the user placed this bid
+      if (user && newBid.user_id === user.id) {
+        setIsHighestBidder(true);
+      } else if (user && isHighestBidder) {
+        // If user was highest bidder but someone else placed a bid, update status
+        setIsHighestBidder(false);
+      }
+      
+      return updatedBids;
+    });
+  }, [user, isHighestBidder]);
+
+  // Use the custom hook with both callbacks
+  useAuctionSubscription(handleAuctionUpdate, handleNewBid);
 
   // Initial data fetch
   useEffect(() => {
     const fetchInitialData = async () => {
       // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setUser(user);
       if (user) {
         checkTermsAcceptance(user.id);
       }
 
       // Fetch auction details
-      const { data, error } = await supabase
+      const { data: auctionData, error: auctionError } = await supabase
         .from("auctions")
         .select("*")
         .eq("is_active", true)
         .single();
 
-      if (!error && data) {
-        setAuction(data);
+      if (!auctionError && auctionData) {
+        setAuction(auctionData);
+
+        // Fetch initial bid history
+        const { data: bidsData, error: bidsError } = await supabase
+          .from("bids")
+          .select(`
+            id,
+            amount,
+            created_at,
+            user_id,
+            auction_id
+          `)
+          .eq("auction_id", auctionData.id)
+          .order("created_at", { ascending: false })
+          .limit(5);
+
+        if (!bidsError && bidsData) {
+          setBids(bidsData);
+          // Set initial highest bidder status
+          if (user && bidsData.length > 0) {
+            setIsHighestBidder(bidsData[0].user_id === user.id);
+          }
+        }
       }
     };
 
     fetchInitialData();
   }, []);
 
+  // Add function to check if dimensions are valid
+  const validateDimensions = (dims: DimensionFormInputs): boolean => {
+    const length = parseFloat(dims.length);
+    const width = parseFloat(dims.width);
+    const height = parseFloat(dims.height);
+
+    if (
+      isNaN(length) ||
+      length < DIMENSION_LIMITS.length.min ||
+      length > DIMENSION_LIMITS.length.max
+    ) {
+      setDimensionsError(
+        `Länge muss zwischen ${DIMENSION_LIMITS.length.min} und ${DIMENSION_LIMITS.length.max} cm liegen`
+      );
+      return false;
+    }
+    if (
+      isNaN(width) ||
+      width < DIMENSION_LIMITS.width.min ||
+      width > DIMENSION_LIMITS.width.max
+    ) {
+      setDimensionsError(
+        `Breite muss zwischen ${DIMENSION_LIMITS.width.min} und ${DIMENSION_LIMITS.width.max} cm liegen`
+      );
+      return false;
+    }
+    if (
+      isNaN(height) ||
+      height < DIMENSION_LIMITS.height.min ||
+      height > DIMENSION_LIMITS.height.max
+    ) {
+      setDimensionsError(
+        `Höhe muss zwischen ${DIMENSION_LIMITS.height.min} und ${DIMENSION_LIMITS.height.max} cm liegen`
+      );
+      return false;
+    }
+    return true;
+  };
+
+  // Modify checkTermsAcceptance to also check for dimensions
   const checkTermsAcceptance = async (userId: string) => {
-    const { data, error } = await supabase
+    const { data: termsData, error: termsError } = await supabase
       .from("terms_acceptance")
       .select("*")
       .eq("user_id", userId)
       .single();
 
-    if (!error && data) {
+    const { data: dimensionsData, error: dimensionsError } = await supabase
+      .from("product_dimensions")
+      .select("*")
+      .eq("user_id", userId)
+      .single();
+
+    if (!termsError && termsData) {
       setHasAcceptedTerms(true);
     }
+
+    if (!dimensionsError && dimensionsData) {
+      setDimensions({
+        length: dimensionsData.length,
+        width: dimensionsData.width,
+        height: dimensionsData.height,
+      });
+    }
   };
+
+  // Add function to handle dimension submission
+  const handleDimensionSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+
+    if (!validateDimensions(formInputs)) {
+      return;
+    }
+
+    const newDimensions = {
+      length: parseFloat(formInputs.length),
+      width: parseFloat(formInputs.width),
+      height: parseFloat(formInputs.height),
+    };
+
+    const { error } = await supabase.from("product_dimensions").insert([
+      {
+        user_id: user.id,
+        length: newDimensions.length,
+        width: newDimensions.width,
+        height: newDimensions.height,
+      },
+    ]);
+
+    if (!error) {
+      setDimensionsError("");
+      setDimensions(newDimensions);
+    } else {
+      setDimensionsError(
+        "Fehler beim Speichern der Abmessungen. Bitte versuchen Sie es erneut."
+      );
+    }
+  };
+
+  const handleInputChange =
+    (field: keyof DimensionFormInputs) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormInputs((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }));
+      setDimensionsError(""); // Clear any previous errors when user is typing
+    };
 
   const handleTermsAcceptance = async () => {
     if (!user) return;
@@ -227,49 +426,12 @@ export function Auctionpricecomponent() {
     }
   };
 
-  // Fix the bid history fetch query
-  const fetchBidHistory = async () => {
-    if (!auction?.id) return;
-    
-    const { data, error } = await supabase
-      .from('bids')
-      .select(`
-        id,
-        amount,
-        created_at,
-        user_id,
-        auction_id
-      `)
-      .eq('auction_id', auction.id)
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    if (!error && data) {
-      setBids(data);
-      
-      // Update highest bidder status
-      if (user && data.length > 0) {
-        setIsHighestBidder(data[0].user_id === user.id);
-      }
-    } else {
-      console.error('Error fetching bid history:', error);
-    }
-  };
-
-  // Add effect to fetch bid history periodically
-  useEffect(() => {
-    if (auction?.id) {
-      fetchBidHistory();
-      const interval = setInterval(fetchBidHistory, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [auction?.id, user?.id]);
-
-  // Update TimeUnit component with better contrast
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center">
       <div className="bg-[#1E4959] rounded-lg p-4 backdrop-blur-sm min-w-[80px] border border-[#DBD2A4]/20 shadow-lg">
-        <span className="text-4xl font-bold text-white">{value.toString().padStart(2, '0')}</span>
+        <span className="text-4xl font-bold text-white">
+          {value.toString().padStart(2, "0")}
+        </span>
       </div>
       <span className="text-sm mt-2 text-[#DBD2A4] font-medium">{label}</span>
     </div>
@@ -289,9 +451,11 @@ export function Auctionpricecomponent() {
         } else {
           setTimeLeft({
             days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-            hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+            hours: Math.floor(
+              (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            ),
             minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-            seconds: Math.floor((distance % (1000 * 60)) / 1000)
+            seconds: Math.floor((distance % (1000 * 60)) / 1000),
           });
         }
       }, 1000);
@@ -325,12 +489,16 @@ export function Auctionpricecomponent() {
     const amount = Number(bidAmount);
 
     if (auction && amount <= auction.current_price) {
-      setError(`Das Gebot muss höher sein als der aktuelle Preis (CHF ${auction.current_price.toLocaleString()})`);
+      setError(
+        `Das Gebot muss höher sein als der aktuelle Preis (CHF ${auction.current_price.toLocaleString()})`
+      );
       return;
     }
 
-    if (auction && amount < (auction.current_price + auction.min_bid_increment)) {
-      setError(`Minimale Erhöhung: CHF ${auction.min_bid_increment.toLocaleString()}`);
+    if (auction && amount < auction.current_price + auction.min_bid_increment) {
+      setError(
+        `Minimale Erhöhung: CHF ${auction.min_bid_increment.toLocaleString()}`
+      );
       return;
     }
 
@@ -338,25 +506,26 @@ export function Auctionpricecomponent() {
     setShowConfirmDialog(true);
   };
 
-  // Add confirmBid function
+  // Update confirmBid to handle the response better
   const confirmBid = async () => {
     if (!pendingBidAmount || !auction) return;
-    
+
     setIsLoading(true);
-    setError('');
+    setError("");
     setShowConfirmDialog(false);
 
     try {
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
-      
-      if (!currentUser) throw new Error('Benutzer nicht authentifiziert');
+      const {
+        data: { user: currentUser },
+      } = await supabase.auth.getUser();
 
-      const { data, error } = await supabase
-        .rpc('place_bid', {
-          p_auction_id: auction.id,
-          p_user_id: currentUser.id,
-          p_amount: pendingBidAmount
-        });
+      if (!currentUser) throw new Error("Benutzer nicht authentifiziert");
+
+      const { data, error } = await supabase.rpc("place_bid", {
+        p_auction_id: auction.id,
+        p_user_id: currentUser.id,
+        p_amount: pendingBidAmount,
+      });
 
       if (error) throw error;
 
@@ -364,9 +533,12 @@ export function Auctionpricecomponent() {
         throw new Error(data.message);
       }
 
-      setBidAmount('');
+      setBidAmount("");
+      // The real-time subscription will handle updating the bid history
+      // and highest bidder status
     } catch (err: any) {
       setError(err.message);
+      setIsHighestBidder(false); // Reset highest bidder status if bid failed
     } finally {
       setIsLoading(false);
       setPendingBidAmount(null);
@@ -382,8 +554,8 @@ export function Auctionpricecomponent() {
       }}
       className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-16 space-y-16"
     >
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      
+      <div className="absolute inset-0 bg-black/60" />
+
       <div className="relative z-10 w-full max-w-7xl mx-auto space-y-12">
         {/* Timer Section */}
         {timeLeft && (
@@ -404,7 +576,7 @@ export function Auctionpricecomponent() {
               muted
               loop
               playsInline
-              src="/assets/ufo-video.mp4"
+              src="/assets/versteigerung/ufo_video.mp4"
               poster="/assets/productPhotography_placeholder1.jpg"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
@@ -412,7 +584,9 @@ export function Auctionpricecomponent() {
 
           {auction && (
             <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20">
-              <h2 className="text-2xl font-bold mb-4 text-[#DBD2A4]">{auction.title}</h2>
+              <h2 className="text-2xl font-bold mb-4 text-[#DBD2A4]">
+                {auction.title}
+              </h2>
               <p className="text-lg text-white/90">{auction.description}</p>
             </Card>
           )}
@@ -424,7 +598,9 @@ export function Auctionpricecomponent() {
           <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20 shadow-lg">
             <div className="space-y-6">
               <div className="text-center">
-                <h2 className="text-xl text-[#DBD2A4] font-semibold mb-4">Aktuelles Gebot</h2>
+                <h2 className="text-xl text-[#DBD2A4] font-semibold mb-4">
+                  Aktuelles Gebot
+                </h2>
                 <motion.div
                   key={auction?.current_price}
                   initial={{ scale: 1.1, opacity: 0 }}
@@ -434,7 +610,8 @@ export function Auctionpricecomponent() {
                   CHF {auction?.current_price?.toLocaleString() || "---"}
                 </motion.div>
                 <p className="text-sm text-[#DBD2A4]">
-                  Minimale Erhöhung: CHF {auction?.min_bid_increment?.toLocaleString() || "---"}
+                  Minimale Erhöhung: CHF{" "}
+                  {auction?.min_bid_increment?.toLocaleString() || "---"}
                 </p>
               </div>
 
@@ -448,13 +625,126 @@ export function Auctionpricecomponent() {
 
               {user && auction ? (
                 <div className="space-y-4">
-                  {!hasAcceptedTerms ? (
+                  {!dimensions ? (
                     <Card className="bg-black/40 p-4 space-y-4">
-                      <h3 className="text-lg font-semibold text-[#DBD2A4]">Nutzungsbedingungen</h3>
+                      <h3 className="text-lg font-semibold text-[#DBD2A4]">
+                        Produktabmessungen
+                      </h3>
+                      <p className="text-sm text-white/90">
+                        Bevor Sie ein Gebot abgeben können, geben Sie bitte die
+                        Abmessungen Ihres Produkts ein. Die maximalen
+                        Abmessungen betragen {DIMENSION_LIMITS.length.max}x
+                        {DIMENSION_LIMITS.width.max}x
+                        {DIMENSION_LIMITS.height.max} cm.
+                      </p>
+                      <form
+                        onSubmit={handleDimensionSubmit}
+                        className="space-y-4"
+                      >
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <label className="text-sm text-[#DBD2A4]">
+                              Länge (cm)
+                            </label>
+                            <Input
+                              type="number"
+                              value={formInputs.length}
+                              onChange={handleInputChange("length")}
+                              min={DIMENSION_LIMITS.length.min}
+                              max={DIMENSION_LIMITS.length.max}
+                              step="0.1"
+                              required
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm text-[#DBD2A4]">
+                              Breite (cm)
+                            </label>
+                            <Input
+                              type="number"
+                              value={formInputs.width}
+                              onChange={handleInputChange("width")}
+                              min={DIMENSION_LIMITS.width.min}
+                              max={DIMENSION_LIMITS.width.max}
+                              step="0.1"
+                              required
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-sm text-[#DBD2A4]">
+                              Höhe (cm)
+                            </label>
+                            <Input
+                              type="number"
+                              value={formInputs.height}
+                              onChange={handleInputChange("height")}
+                              min={DIMENSION_LIMITS.height.min}
+                              max={DIMENSION_LIMITS.height.max}
+                              step="0.1"
+                              required
+                              className="mt-1"
+                            />
+                          </div>
+                        </div>
+                        {dimensionsError && (
+                          <Alert variant="destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertDescription>
+                              {dimensionsError}
+                            </AlertDescription>
+                          </Alert>
+                        )}
+                        <Button
+                          type="submit"
+                          className="w-full bg-[#1E4959] hover:bg-[#2a6275] text-white"
+                        >
+                          Abmessungen bestätigen
+                        </Button>
+                      </form>
+                    </Card>
+                  ) : !hasAcceptedTerms ? (
+                    <Card className="bg-black/40 p-4 space-y-4">
+                      <h3 className="text-lg font-semibold text-[#DBD2A4]">
+                        Nutzungsbedingungen
+                      </h3>
+                      <div className="rounded-md border border-[#DBD2A4]/20 p-4 mb-4">
+                        <h4 className="text-md font-medium text-[#DBD2A4] mb-2">
+                          Ihre Produktabmessungen
+                        </h4>
+                        <p className="text-sm text-white/90">
+                          Länge: {dimensions.length} cm
+                          <br />
+                          Breite: {dimensions.width} cm
+                          <br />
+                          Höhe: {dimensions.height} cm
+                        </p>
+                      </div>
                       <ScrollArea className="h-40 rounded-md border border-[#DBD2A4]/20 p-4">
                         <div className="text-sm text-white/90">
                           <p>1. Allgemeine Bestimmungen</p>
-                          <p>Diese Nutzungsbedingungen regeln die Teilnahme an der Auktion für Werbeplätze...</p>
+                          <p>
+                            Diese Nutzungsbedingungen regeln die Teilnahme an
+                            der Auktion für Werbeplätze.
+                          </p>
+                          <p className="mt-4">
+                            Bitte lesen Sie den vollständigen{" "}
+                            <a
+                              href="/assets/legal/auction_contract.pdf"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#DBD2A4] hover:underline"
+                            >
+                              Auktionsvertrag (PDF)
+                            </a>{" "}
+                            sorgfältig durch, bevor Sie ein Gebot abgeben.
+                          </p>
+                          <p className="mt-4">
+                            Mit der Teilnahme an der Auktion und der Abgabe
+                            eines Gebots stimmen Sie den Bedingungen des
+                            Auktionsvertrags zu.
+                          </p>
                         </div>
                       </ScrollArea>
                       <div className="flex items-center space-x-2">
@@ -463,8 +753,12 @@ export function Auctionpricecomponent() {
                           checked={hasAcceptedTerms}
                           onCheckedChange={() => handleTermsAcceptance()}
                         />
-                        <label htmlFor="terms" className="text-sm font-medium text-white/90">
-                          Ich akzeptiere die Nutzungsbedingungen
+                        <label
+                          htmlFor="terms"
+                          className="text-sm font-medium text-white/90"
+                        >
+                          Ich akzeptiere die Nutzungsbedingungen und den
+                          Auktionsvertrag
                         </label>
                       </div>
                     </Card>
@@ -477,7 +771,9 @@ export function Auctionpricecomponent() {
                           onChange={(e) => setBidAmount(e.target.value)}
                           placeholder="Geben Sie Ihr Gebot ein"
                           className="h-12 pl-12 text-lg bg-white/95 border-[#DBD2A4]/30 focus:border-[#DBD2A4]/60"
-                          min={auction?.current_price + auction?.min_bid_increment}
+                          min={
+                            auction?.current_price + auction?.min_bid_increment
+                          }
                           step={auction?.min_bid_increment}
                           disabled={isHighestBidder}
                         />
@@ -490,9 +786,9 @@ export function Auctionpricecomponent() {
                         disabled={isLoading || isHighestBidder}
                         variant={isHighestBidder ? "secondary" : "default"}
                         className={`w-full h-12 text-lg font-medium ${
-                          isHighestBidder 
-                            ? 'bg-green-600 hover:bg-green-700 text-white' 
-                            : 'bg-[#1E4959] hover:bg-[#2a6275] text-white'
+                          isHighestBidder
+                            ? "bg-green-600 hover:bg-green-700 text-white"
+                            : "bg-[#1E4959] hover:bg-[#2a6275] text-white"
                         }`}
                       >
                         {isLoading
@@ -506,7 +802,9 @@ export function Auctionpricecomponent() {
                 </div>
               ) : (
                 <div className="space-y-4 text-center">
-                  <p className="text-[#DBD2A4] font-medium">Bitte melden Sie sich an, um ein Gebot abzugeben</p>
+                  <p className="text-[#DBD2A4] font-medium">
+                    Bitte melden Sie sich an, um ein Gebot abzugeben
+                  </p>
                   <GoogleSignInComponent />
                 </div>
               )}

@@ -58,13 +58,13 @@ export function ContactPageComponent() {
 
             <main className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
                 <div className="text-center mb-16">
-                    <h1 className="text-5xl sm:text-6xl font-bold mb-4">
-                        <span className="text-white">Lassen Sie uns</span>{" "}
-                        <span className="text-[#DBD2A4]">zusammenarbeiten</span>
+                    <h1 className="text-5xl sm:text-4xl font-bold mb-4">
+                        <span className="text-white text-6xl">Bewege</span>{" "}
+                        <span className="text-[#DBD2A4]">etwas mit uns!</span>
                     </h1>
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                        Erzählen Sie uns von Ihrem Projekt und lassen Sie uns gemeinsam
-                        Ihre Vision zum Leben erwecken
+                        Erzähle uns von deinem Projekt und lasse uns gemeinsam
+                        deine Vision zum Leben erwecken
                     </p>
                 </div>
 
@@ -73,7 +73,7 @@ export function ContactPageComponent() {
                     {/* Tally Form */}
                     <div className="backdrop-blur-sm bg-black/20 p-6 rounded-lg">
                         <iframe
-                            data-tally-src="https://tally.so/embed/me9yKQ?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                            data-tally-src="https://tally.so/embed/wM8PgA?alignLeft=1&hideTitle=1&dynamicHeight=1"
                             loading="lazy"
                             width="100%"
                             height="500"
@@ -128,7 +128,7 @@ export function ContactPageComponent() {
                 </div>
 
                 {/* Full-width Robot Animation */}
-                <div className="h-[400px] relative rounded-lg overflow-hidden backdrop-blur-sm bg-black/20 w-full">
+                <div className="h-[400px] relative rounded-lg overflow-hidden backdrop-blur-sm w-full">
                     <Canvas
                         camera={{ 
                             position: [0, 1, 5],
