@@ -21,7 +21,13 @@ export function UserMenu({ user }: UserMenuProps) {
   const userImage = user.user_metadata.avatar_url;
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+      navigate("/");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   return (
