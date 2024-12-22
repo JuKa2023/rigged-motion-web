@@ -35,12 +35,12 @@ export function AuctionPageComponent() {
       </motion.div>
 
       {/* Scrollable content */}
-      <div className="min-h-[400vh] relative">
+      <div className="min-h-fit relative">
         {/* UFO and Beam with images */}
         <UfoBeam />
 
-        <div className="sticky top-[60vh] w-full max-w-4xl mx-auto px-4 z-20 mb-10">
-          <div className="text-center mt-8 space-y-4">
+        <div className="sticky top-[60vh] w-full max-w-4xl mx-auto px-4 z-20 mb-24">
+          <div className="text-center mt-8 space-y-10">
             <h3 className="text-2xl font-bold text-white">
               Premium Werbeplatz
             </h3>
@@ -70,7 +70,7 @@ export function AuctionPageComponent() {
                 </p>
               </div>
             </div>
-            <div className="space-y-4 text-center">
+            <div className="space-y-4 text-center mt-16">
               <h4 className="text-xl font-semibold text-white">Ablauf</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
@@ -81,6 +81,7 @@ export function AuctionPageComponent() {
                     Sichern Sie sich den Platz durch Ihre Gebotsabgabe.
                   </p>
                 </div>
+
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
                   <h5 className="font-semibold mb-2">
                     2. Bereitstellung Ihrer Produktinformationen

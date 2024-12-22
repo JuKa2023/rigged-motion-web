@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
+import {useEffect, useState} from "react"
+import {motion} from "framer-motion"
 import productPhotography1png from '/assets/versteigerung/product_chocolate.png'
 import productPhotography2png from '/assets/versteigerung/product_gift.png'
 import productPhotography3png from '/assets/versteigerung/product_phone.png'
@@ -9,7 +9,7 @@ export function UfoBeam() {
     const [stars, setStars] = useState<{ x: number; y: number; delay: number }[]>([])
 
     useEffect(() => {
-        const newStars = Array.from({ length: 20 }, () => ({
+        const newStars = Array.from({length: 20}, () => ({
             x: Math.random() * 100,
             y: Math.random() * 100,
             delay: Math.random() * 2,
@@ -18,7 +18,7 @@ export function UfoBeam() {
     }, [])
 
     return (
-        <div className="relative min-h-screen w-full bg-[#0a001f] overflow-x-hidden">
+        <div className="relative min-h-fit w-full bg-[#0a001f] overflow-x-hidden overflow-y-hidden">
             {/* Stars in the background */}
             {stars.map((star, i) => (
                 <motion.div
@@ -42,8 +42,8 @@ export function UfoBeam() {
 
             {/* UFO */}
             <motion.div
-                className="sticky top-20 w-full h-40 flex justify-center z-7"
-                animate={{ y: [0, -10, 0] }}
+                className="w-full h-40 flex justify-center z-7 -mt-20"
+                animate={{y: [0, -10, 0]}}
                 transition={{
                     duration: 4,
                     repeat: Infinity,
@@ -63,7 +63,6 @@ export function UfoBeam() {
                             repeat: Infinity,
                             ease: "easeInOut",
                         }}
-
                     />
                 </div>
             </motion.div>
