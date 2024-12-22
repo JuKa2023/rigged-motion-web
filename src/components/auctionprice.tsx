@@ -454,7 +454,22 @@ export function Auctionpricecomponent() {
                       <ScrollArea className="h-40 rounded-md border border-[#DBD2A4]/20 p-4">
                         <div className="text-sm text-white/90">
                           <p>1. Allgemeine Bestimmungen</p>
-                          <p>Diese Nutzungsbedingungen regeln die Teilnahme an der Auktion für Werbeplätze...</p>
+                          <p>Diese Nutzungsbedingungen regeln die Teilnahme an der Auktion für Werbeplätze.</p>
+                          <p className="mt-4">
+                            Bitte lesen Sie den vollständigen{" "}
+                            <a
+                              href="/assets/legal/auction_contract.pdf"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#DBD2A4] hover:underline"
+                            >
+                              Auktionsvertrag (PDF)
+                            </a>
+                            {" "}sorgfältig durch, bevor Sie ein Gebot abgeben.
+                          </p>
+                          <p className="mt-4">
+                            Mit der Teilnahme an der Auktion und der Abgabe eines Gebots stimmen Sie den Bedingungen des Auktionsvertrags zu.
+                          </p>
                         </div>
                       </ScrollArea>
                       <div className="flex items-center space-x-2">
@@ -464,7 +479,7 @@ export function Auctionpricecomponent() {
                           onCheckedChange={() => handleTermsAcceptance()}
                         />
                         <label htmlFor="terms" className="text-sm font-medium text-white/90">
-                          Ich akzeptiere die Nutzungsbedingungen
+                          Ich akzeptiere die Nutzungsbedingungen und den Auktionsvertrag
                         </label>
                       </div>
                     </Card>
