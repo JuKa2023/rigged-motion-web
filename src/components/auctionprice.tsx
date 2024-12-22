@@ -62,7 +62,7 @@ const DIMENSION_LIMITS = {
 };
 
 // Custom hook for real-time auction updates
-function useAuctionSubscription(onAuctionUpdate: (auction: Auction) => void) {
+function useAuctionSubscription(onAuctionUpdate: (auction: Auction) => void, onNewBid: (bid: Bid) => void) {
   useEffect(() => {
     // Create and subscribe to the channel
     const channel = supabase.channel("auction-channel", {
@@ -97,32 +97,19 @@ function useAuctionSubscription(onAuctionUpdate: (auction: Auction) => void) {
         },
         (payload) => {
           console.log("New bid received:", payload);
-          // Fetch latest auction data
-          fetchLatestAuction();
+          if (payload.new) {
+            onNewBid(payload.new as Bid);
+          }
         }
       )
       .subscribe((status) => {
         console.log("Subscription status:", status);
       });
 
-    // Helper function to fetch latest auction data
-    const fetchLatestAuction = async () => {
-      const { data, error } = await supabase
-        .from("auctions")
-        .select("*")
-        .eq("is_active", true)
-        .single();
-
-      if (!error && data) {
-        onAuctionUpdate(data);
-      }
-    };
-
-    // Cleanup subscription
     return () => {
       channel.unsubscribe();
     };
-  }, [onAuctionUpdate]);
+  }, [onAuctionUpdate, onNewBid]);
 }
 
 // Update the bid history component with Shadcn components
@@ -244,8 +231,26 @@ export function Auctionpricecomponent() {
     setAuction(newAuction);
   }, []);
 
-  // Use the custom hook
-  useAuctionSubscription(handleAuctionUpdate);
+  // Add callback for new bids
+  const handleNewBid = useCallback((newBid: Bid) => {
+    setBids(prevBids => {
+      // Add new bid to the start of the array and keep only the last 5
+      const updatedBids = [newBid, ...prevBids].slice(0, 5);
+      
+      // Update highest bidder status immediately if the user placed this bid
+      if (user && newBid.user_id === user.id) {
+        setIsHighestBidder(true);
+      } else if (user && isHighestBidder) {
+        // If user was highest bidder but someone else placed a bid, update status
+        setIsHighestBidder(false);
+      }
+      
+      return updatedBids;
+    });
+  }, [user, isHighestBidder]);
+
+  // Use the custom hook with both callbacks
+  useAuctionSubscription(handleAuctionUpdate, handleNewBid);
 
   // Initial data fetch
   useEffect(() => {
@@ -260,14 +265,36 @@ export function Auctionpricecomponent() {
       }
 
       // Fetch auction details
-      const { data, error } = await supabase
+      const { data: auctionData, error: auctionError } = await supabase
         .from("auctions")
         .select("*")
         .eq("is_active", true)
         .single();
 
-      if (!error && data) {
-        setAuction(data);
+      if (!auctionError && auctionData) {
+        setAuction(auctionData);
+
+        // Fetch initial bid history
+        const { data: bidsData, error: bidsError } = await supabase
+          .from("bids")
+          .select(`
+            id,
+            amount,
+            created_at,
+            user_id,
+            auction_id
+          `)
+          .eq("auction_id", auctionData.id)
+          .order("created_at", { ascending: false })
+          .limit(5);
+
+        if (!bidsError && bidsData) {
+          setBids(bidsData);
+          // Set initial highest bidder status
+          if (user && bidsData.length > 0) {
+            setIsHighestBidder(bidsData[0].user_id === user.id);
+          }
+        }
       }
     };
 
@@ -399,43 +426,6 @@ export function Auctionpricecomponent() {
     }
   };
 
-  const fetchBidHistory = async () => {
-    if (!auction?.id) return;
-
-    const { data, error } = await supabase
-      .from("bids")
-      .select(
-        `
-        id,
-        amount,
-        created_at,
-        user_id,
-        auction_id
-      `
-      )
-      .eq("auction_id", auction.id)
-      .order("created_at", { ascending: false })
-      .limit(5);
-
-    if (!error && data) {
-      setBids(data);
-
-      if (user && data.length > 0) {
-        setIsHighestBidder(data[0].user_id === user.id);
-      }
-    } else {
-      console.error("Error fetching bid history:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (auction?.id) {
-      fetchBidHistory();
-      const interval = setInterval(fetchBidHistory, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [auction?.id, user?.id]);
-
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center">
       <div className="bg-[#1E4959] rounded-lg p-4 backdrop-blur-sm min-w-[80px] border border-[#DBD2A4]/20 shadow-lg">
@@ -516,7 +506,7 @@ export function Auctionpricecomponent() {
     setShowConfirmDialog(true);
   };
 
-  // Add confirmBid function
+  // Update confirmBid to handle the response better
   const confirmBid = async () => {
     if (!pendingBidAmount || !auction) return;
 
@@ -544,8 +534,11 @@ export function Auctionpricecomponent() {
       }
 
       setBidAmount("");
+      // The real-time subscription will handle updating the bid history
+      // and highest bidder status
     } catch (err: any) {
       setError(err.message);
+      setIsHighestBidder(false); // Reset highest bidder status if bid failed
     } finally {
       setIsLoading(false);
       setPendingBidAmount(null);
