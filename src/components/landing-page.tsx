@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, Rocket, Video, Target } from 'lucide-react'
 import { Link } from "react-router-dom"
-import placeholderpng from '/assets/placeholder.png'
+import teamjpg from '/assets/team.jpg'
 import { Canvas } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import { Suspense } from "react";
@@ -72,8 +72,9 @@ export function LandingPageComponent() {
         <main className="container mx-auto px-4">
           <section className="py-20 text-center">
             <h1 className="bg-clip-text text-white">
-              Rigged Motion Studios
+              Rigged Motion
             </h1>
+            <h1 className="bg-clip-text text-white">Studios</h1>
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
               Revolutionieren Sie Ihre Markenpräsenz mit unseren kreativen
               Videoproduktionen. Wir bieten exklusive Werbeplätze in einzigartigen
@@ -140,9 +141,9 @@ export function LandingPageComponent() {
             <div className="flex justify-center mb-8">
               <div className="rounded-lg shadow-md overflow-hidden backdrop-blur-sm bg-black/20">
                 <img
-                  src={placeholderpng}
+                  src={teamjpg}
                   alt="Our Team"
-                  className="w-full h-auto max-w-[80%] mx-auto"
+                  className="w-full h-auto max-w-[60%] mx-auto"
                 />
               </div>
             </div>
