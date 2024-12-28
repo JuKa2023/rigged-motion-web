@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import RiggedmotionSvg from '/assets/Riggedmotion.svg'
 import { GoogleSignInComponent } from "@/components/GoogleSignIn"
-import { SignOut } from "@/components/SignOut"
 import { useAuth } from "@/contexts/AuthContext"
 import { Menu, X } from 'lucide-react' // Icons for burger menu
+import { UserMenu } from "@/components/UserMenu"
 
 export function HeaderComponent() {
     const { user } = useAuth()
@@ -48,7 +48,7 @@ export function HeaderComponent() {
                             Kontakt
                         </Link>
                         {user ? (
-                            <SignOut />
+                            <UserMenu user={user} />
                         ) : (
                             <GoogleSignInComponent />
                         )}
