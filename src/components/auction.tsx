@@ -70,39 +70,39 @@ export function AuctionPageComponent() {
                 </p>
               </div>
             </div>
-            <div className="space-y-4 text-center mt-16">
+            <div className="space-y-4 text-center mt-104">
               <h4 className="text-xl font-semibold text-white">Ablauf</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6 text-left">
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
                   <h5 className="font-semibold mb-2">
                     1. Teilnahme an der Auktion
                   </h5>
-                  <p className="text-sm text-gray-300">
+                  <p className="text-gray-300">
                     Sichern Sie sich den Platz durch Ihre Gebotsabgabe.
                   </p>
                 </div>
 
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
-                  <h5 className="font-semibold mb-2">
+                  <h5 className="font-semibold mb-4">
                     2. Bereitstellung Ihrer Produktinformationen
                   </h5>
-                  <p className="text-sm text-gray-300">
+                  <p className="text-gray-300">
                     Teilen Sie uns alle notwendigen Assets und Details mit.
                   </p>
                 </div>
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
-                  <h5 className="font-semibold mb-2">
+                  <h5 className="font-semibold mb-4">
                     3. Konzeption und Produktion
                   </h5>
-                  <p className="text-sm text-gray-300">
+                  <p className="text-gray-300">
                     Unser Team integriert Ihr Produkt in den Werbespot.
                   </p>
                 </div>
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
-                  <h5 className="font-semibold mb-2">
+                  <h5 className="font-semibold mb-4">
                     4. Freigabe und Veröffentlichung
                   </h5>
-                  <p className="text-sm text-gray-300">
+                  <p className="text-gray-300">
                     Nach Ihrer Freigabe geht der Spot live!
                   </p>
                 </div>
