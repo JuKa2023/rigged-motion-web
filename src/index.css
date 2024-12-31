@@ -130,3 +130,10 @@ h1 {
     @apply bg-background text-foreground;
   }
 }
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2.5rem; /* Adjust to your preferred size */
+    line-height: 1.2;  /* Adjust line height if needed */
+  }
+}

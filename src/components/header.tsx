@@ -34,7 +34,7 @@ export function HeaderComponent() {
                     </button>
 
                     {/* Navbar Links */}
-                    <nav className={`absolute lg:static top-16 left-0 w-full lg:w-auto bg-black lg:bg-transparent flex-col lg:flex-row lg:flex items-center space-x-0 lg:space-x-8 gap-6 ${isMenuOpen ? 'flex' : 'hidden'} lg:flex`}>
+                    <nav className={`absolute lg:static top-16 left-0 w-full lg:w-auto lg:bg-transparent flex-col lg:flex-row lg:flex items-center space-x-0 lg:space-x-8 gap-6 ${isMenuOpen ? 'flex' : 'hidden'} lg:flex`}>
                         <Link
                             to="/auction"
                             className="text-gray-200 hover:text-[#DBD2A4] transition-colors py-2 lg:py-0"
