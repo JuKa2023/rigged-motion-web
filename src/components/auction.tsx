@@ -14,7 +14,7 @@ export function AuctionPageComponent() {
   const titleOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
   return (
-    <div ref={containerRef} className="relative bg-[#0a001f]">
+    <div ref={containerRef} className="relative">
       {/* Initial title view */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-screen flex items-center justify-center text-center z-10 pointer-events-none"
