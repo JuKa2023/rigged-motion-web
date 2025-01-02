@@ -12,7 +12,7 @@ INSERT INTO auctions (
 ) VALUES (
     'Premium Advertising Spot',
     'Sichere dir einen Platz für dein Produkt in unserer nächsten galaktischen Marketingkampagne. Dein Produkt wird in einer 3D-Animation vorgestellt, die im ganzen Universum für Aufmerksamkeit sorgen wird.',
-    1000.00,
+    200.00,
     100.00,
     CURRENT_TIMESTAMP + INTERVAL '7 days',
     true,

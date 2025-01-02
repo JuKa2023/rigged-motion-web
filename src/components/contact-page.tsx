@@ -95,8 +95,8 @@ export function ContactPageComponent() {
                                 </div>
                                 <div className="text-left">
                                     <p className="text-[#DBD2A4] font-medium mb-1">Adresse</p>
-                                    <p className="text-white">Holzikhofenweg 8</p>
-                                    <p className="text-white">3800 Bern</p>
+                                    <p className="text-white">Breitenrainpl. 29</p>
+                                    <p className="text-white">3014 Bern</p>
                                 </div>
                             </div>
                             
