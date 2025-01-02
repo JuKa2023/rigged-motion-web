@@ -53,12 +53,12 @@ export function AuctionPageComponent() {
                   Professionelle Integration
                 </h4>
                 <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
-                  Dein Produkt wird ganz nach deinen Wünschen in das Video eingebaut               </p>
+                  Dein Produkt wird ganz nach deinen Wünschen in das Video eingebaut</p>
               </div>
               <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30">
                 <h4 className="font-bold text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">Maximale Reichweite</h4>
                 <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
-                  Marketing auf allen Plattformen                </p>
+                  Marketing auf allen Plattformen</p>
               </div>
               <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30">
                 <h4 className="font-bold text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">Herausstechen</h4>
@@ -74,7 +74,7 @@ export function AuctionPageComponent() {
                     1. Teilnahme an der Auktion
                   </h4>
                   <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
-                    Sichere dir den Platz durch eine Gebotsabgab.                  </p>
+                    Sichere dir den Platz durch eine Gebotsabgab.</p>
                 </div>
 
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
@@ -82,14 +82,14 @@ export function AuctionPageComponent() {
                     2. Bereitstellung der Produktinformationen
                   </h4>
                   <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
-                    Teile uns mit, was dein Produkt ist.                  </p>
+                    Teile uns mit, was dein Produkt ist.</p>
                 </div>
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
                   <h4 className="font-bold text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                     3. Konzeption und Produktion
                   </h4>
                   <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
-                    Unser Team integriert dein Produkt in den Werbespot.                  </p>
+                    Unser Team integriert dein Produkt in den Werbespot.</p>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@ export function AuctionPageComponent() {
         </div>
       </div>
 
-      <Auctionpricecomponent />
+      <Auctionpricecomponent/>
     </div>
   );
 }
