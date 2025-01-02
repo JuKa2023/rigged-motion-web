@@ -609,7 +609,6 @@ export function Auctionpricecomponent() {
             <video
               className="w-full h-full object-cover"
               autoPlay
-              muted
               loop
               playsInline
               src="/assets/versteigerung/ufo_video.mp4"

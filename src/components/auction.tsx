@@ -22,13 +22,13 @@ export function AuctionPageComponent() {
       >
         <div className="max-w-2xl mx-auto p-4 space-y-4 flex flex-col items-center justify-center text-center">
           <h1 className="text-3xl md:text-5xl text-white">
-            Ihr Produkt im
+            Dein Produkt im
             <span className=" text-[#DBD2A4] px-4">
                Galaktischen Rampenlicht
             </span>
           </h1>
           <p className="text-3xl text-white">
-            Sichern Sie sich einen exklusiven Werbeplatz in unserem
+            Sichere dir einen exklusiven Werbeplatz in unserem
             UFO-Video
           </p>
         </div>

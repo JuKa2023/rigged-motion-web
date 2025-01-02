@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, Rocket, Video, Target } from 'lucide-react'
 import { Link } from "react-router-dom"
-import teamjpg from '/assets/team.jpg'
+import teamjpg from '/assets/team1.jpg'
 import { Canvas } from "@react-three/fiber";
 import { useGLTF, OrbitControls } from "@react-three/drei";
 import { Suspense } from "react";
@@ -132,7 +132,7 @@ export function LandingPageComponent() {
           <section className="py-16">
             <h2 className="text-3xl font-bold mb-8 text-center">Über Uns</h2>
             <div className="flex justify-center mb-8">
-              <div className="rounded-lg shadow-md overflow-hidden backdrop-blur-sm bg-black/20">
+              <div className="rounded-lg overflow-hidden">
                 <img
                   src={teamjpg}
                   alt="Our Team"
