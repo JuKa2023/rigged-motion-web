@@ -49,46 +49,46 @@ export function AuctionPageComponent() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30">
-                <h4 className="font-semibold mb-2">
+                <h4 className="font-bold text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                   Professionelle Integration
                 </h4>
-                <p className="text-sm text-gray-300">
+                <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                   Dein Produkt wird ganz nach deinen Wünschen in das Video eingebaut               </p>
               </div>
               <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30">
-                <h4 className="font-semibold mb-2">Maximale Reichweite</h4>
-                <p className="text-sm text-gray-300">
+                <h4 className="font-bold text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">Maximale Reichweite</h4>
+                <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                   Marketing auf allen Plattformen                </p>
               </div>
               <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30">
-                <h4 className="font-semibold mb-2">Herausstechen</h4>
-                <p className="text-sm text-gray-300">
+                <h4 className="font-bold text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">Herausstechen</h4>
+                <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                   Hebe dich von der Konkurrenz ab</p>
               </div>
             </div>
             <div className="space-y-4 text-center mt-104">
-              <h4 className="text-xl font-semibold text-white">Ablauf</h4>
+              <h3 className="text-2xl font-bold text-white">Ablauf</h3>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-6 text-left">
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
-                  <h5 className="font-semibold mb-2">
+                  <h4 className="font-bold text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                     1. Teilnahme an der Auktion
-                  </h5>
-                  <p className="text-gray-300">
+                  </h4>
+                  <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                     Sichere dir den Platz durch eine Gebotsabgab.                  </p>
                 </div>
 
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
-                  <h5 className="font-semibold mb-4">
+                  <h4 className="font-bold text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                     2. Bereitstellung der Produktinformationen
-                  </h5>
-                  <p className="text-gray-300">
+                  </h4>
+                  <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                     Teile uns mit, was dein Produkt ist.                  </p>
                 </div>
                 <div className="backdrop-blur-sm bg-black/20 p-8 rounded-lg border border-[#1E4959]/30 text-center">
-                  <h5 className="font-semibold mb-4">
+                  <h4 className="font-bold text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                     3. Konzeption und Produktion
-                  </h5>
-                  <p className="text-gray-300">
+                  </h4>
+                  <p className="font-light text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
                     Unser Team integriert dein Produkt in den Werbespot.                  </p>
                 </div>
               </div>
