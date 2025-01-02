@@ -76,14 +76,7 @@ export function LandingPageComponent() {
             </h1>
             <h1 className="bg-clip-text text-white">Studios</h1>
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
-              Revolutionieren Sie Ihre Markenpräsenz mit unseren kreativen
-              Videoproduktionen. Wir bieten exklusive Werbeplätze in einzigartigen
-              3D-Animationen, die Ihr Produkt auf eine völlig neue Ebene heben.
-            </p>
-            <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-300">
-              Durch unsere innovative Kombination aus 3D-Animation und viraler
-              Reichweite erreicht Ihre Marke ein Millionenpublikum auf eine Art,
-              die in Erinnerung bleibt.
+              Willkommen bei Rigged Motion Studios, deinem Partner für beeindruckende 3D-Animationen für Werbezwecke. Wir sind ein junges, dynamisches Team von Designern und Animatoren, das mit Leidenschaft und frischen Ideen daran arbeitet, Deine Visionen zum Leben zu erwecken. Mit neusten Technologien und einem Auge für Details gestalten wir visuelle Erlebnisse, die begeistern und in Erinnerung bleiben.
             </p>
             <div className="flex justify-center space-x-4">
               <Link to="/auction">
@@ -99,18 +92,18 @@ export function LandingPageComponent() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 {
-                  title: "Premium Werbeplätze",
-                  description: "Exklusive Spots in kreativen Videoproduktionen",
+                  title: "3D Animation",
+                  description: "Voll animierte Werbevideos ohne die Einschränkungen der Realität.",
                   icon: Rocket,
                 },
                 {
-                  title: "Professionelle Integration",
-                  description: "Nahtlose Einbindung Ihres Produkts",
+                  title: "Virtual Tours",
+                  description: "Virtuell begehbare Erlebnisse für deine Räumlichkeiten.",
                   icon: Video,
                 },
                 {
-                  title: "Maximale Reichweite",
-                  description: "Viral Marketing auf allen Plattformen",
+                  title: "VFX",
+                  description: "Virtuell begehbare Erlebnisse für deine Räumlichkeiten.",
                   icon: Target,
                 },
               ].map((service, index) => (
@@ -149,19 +142,7 @@ export function LandingPageComponent() {
             </div>
             <div className="space-y-6 max-w-3xl mx-auto text-center">
               <p className="text-xl text-white">
-                Wir sind ein kreatives Team von 3D-Künstlern und Animatoren, die
-                sich auf die Erstellung innovativer Marketinginhalte spezialisiert
-                haben.
-              </p>
-              <p className="text-xl text-white">
-                Mit modernster 3D-Technologie und kreativen Konzepten entwickeln
-                wir einzigartige Videoproduktionen, die Ihre Marke zum Leben
-                erwecken.
-              </p>
-              <p className="text-xl text-white">
-                Jedes Teammitgleid bringt einzigartige kreative Ansätze und
-                Fähigkeiten ein, die wir in kollaborativen Projekten zu
-                beeindruckenden Ergebnissen vereinen.
+                Wir sind ein Team von Multimedia-Studenten, die eine Leidenschaft für 3D-Animationen und VFX teilen. Jeder von uns bringt eigene kreative Ansätze und Fähigkeiten mit, die wir in gemeinsamen Projekten vereinen. Wir sind neugierig, experimentierfreudig und stets auf der Suche nach neuen Herausforderungen. Obwohl wir noch am Anfang unseres Weges stehen, sind wir motiviert und freuen uns darauf, unsere Begeisterung für Animation mit DIR zu teilen.
               </p>
             </div>
           </section>

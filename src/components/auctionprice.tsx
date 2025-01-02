@@ -361,7 +361,7 @@ export function Auctionpricecomponent() {
       return false;
     }
     if (!inputs.product_vision.trim()) {
-      setDimensionsError("Bitte geben Sie eine Produktbeschreibung ein");
+      setDimensionsError("Bitte gebe eine Produktbeschreibung ein");
       return false;
     }
     return true;
@@ -427,7 +427,7 @@ export function Auctionpricecomponent() {
       setDimensions(newPreferences);
     } else {
       setDimensionsError(
-        "Fehler beim Speichern der Präferenzen. Bitte versuchen Sie es erneut."
+        "Fehler beim Speichern der Präferenzen. Bitte versuche es erneut."
       );
     }
   };
@@ -498,27 +498,27 @@ export function Auctionpricecomponent() {
   // Update handleBid to check for preferences
   const handleBid = async () => {
     if (!user) {
-      setError("Bitte melden Sie sich an, um ein Gebot abzugeben");
+      setError("Bitte melde dich an, um ein Gebot abzugeben");
       return;
     }
 
     if (isHighestBidder) {
-      setError("Sie sind bereits Höchstbietender");
+      setError("Du bereits Höchstbietender");
       return;
     }
 
     if (!hasAcceptedTerms) {
-      setError("Bitte akzeptieren Sie die Nutzungsbedingungen");
+      setError("Bitte akzeptiere die Nutzungsbedingungen");
       return;
     }
 
     if (!dimensions) {
-      setError("Bitte geben Sie zuerst Ihre Produktdetails ein");
+      setError("Bitte gebe zuerst die Produktdetails ein");
       return;
     }
 
     if (!bidAmount || isNaN(Number(bidAmount))) {
-      setError("Bitte geben Sie einen gültigen Betrag ein");
+      setError("Bitte gebe einen gültigen Betrag ein");
       return;
     }
 
@@ -667,8 +667,8 @@ export function Auctionpricecomponent() {
                         Produktdetails
                       </h3>
                       <p className="text-sm text-white/90">
-                        Bevor Sie ein Gebot abgeben können, geben Sie bitte die
-                        Abmessungen und eine Beschreibung Ihres Produkts ein.
+                        Bevor du ein Gebot abgeben kannst, gebe bitte die
+                        Abmessungen und eine Beschreibung deines Produkts ein.
                       </p>
                       <form
                         onSubmit={handlePreferencesSubmit}
@@ -756,7 +756,7 @@ export function Auctionpricecomponent() {
                       </h3>
                       <div className="rounded-md border border-[#DBD2A4]/20 p-4 mb-4">
                         <h4 className="text-md font-medium text-[#DBD2A4] mb-2">
-                          Ihre Produktdetails
+                          Deine Produktdetails
                         </h4>
                         <p className="text-sm text-white/90">
                           Länge: {dimensions.length} cm
@@ -767,7 +767,7 @@ export function Auctionpricecomponent() {
                         </p>
                         <div className="mt-4">
                           <h4 className="text-md font-medium text-[#DBD2A4] mb-2">
-                            Ihre Vision
+                            Deine Vision
                           </h4>
                           <p className="text-sm text-white/90">
                             {dimensions.product_vision}
@@ -782,7 +782,7 @@ export function Auctionpricecomponent() {
                             der Auktion für Werbeplätze.
                           </p>
                           <p className="mt-4">
-                            Bitte lesen Sie den vollständigen{" "}
+                            Bitte lesen den vollständigen{" "}
                             <a
                               href="/assets/legal/auction_contract.pdf"
                               target="_blank"
@@ -791,11 +791,11 @@ export function Auctionpricecomponent() {
                             >
                               Auktionsvertrag (PDF)
                             </a>{" "}
-                            sorgfältig durch, bevor Sie ein Gebot abgeben.
+                            sorgfältig durch, bevor du ein Gebot abgibst.
                           </p>
                           <p className="mt-4">
                             Mit der Teilnahme an der Auktion und der Abgabe
-                            eines Gebots stimmen Sie den Bedingungen des
+                            eines Gebots stimmst du den Bedingungen des
                             Auktionsvertrags zu.
                           </p>
                         </div>
@@ -856,7 +856,7 @@ export function Auctionpricecomponent() {
               ) : (
                 <div className="space-y-4 text-center">
                   <p className="text-[#DBD2A4] font-medium">
-                    Bitte melden Sie sich an, um ein Gebot abzugeben
+                    Bitte melde dich an, um ein Gebot abzugeben
                   </p>
                   <GoogleSignInComponent />
                 </div>
@@ -880,7 +880,7 @@ export function Auctionpricecomponent() {
           <DialogHeader>
             <DialogTitle>Gebot bestätigen</DialogTitle>
             <DialogDescription>
-              Möchten Sie das folgende Gebot verbindlich abgeben?
+              Möchtest du das folgende Gebot verbindlich abgeben?
             </DialogDescription>
           </DialogHeader>
           <div className="flex items-center justify-center py-4">
