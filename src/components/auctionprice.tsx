@@ -209,7 +209,6 @@ const AnimatedBidHistory = ({
 };
 
 const AuctionEndScreen = ({
-  auction,
   bids,
   user,
   dimensions,
@@ -340,7 +339,9 @@ const AuctionEndScreen = ({
             </div>
             <div>
               <p className="text-sm text-gray-400">Ihre Vision</p>
-              <p className="text-white mt-1">{dimensions.product_vision}</p>
+              <p className="text-white mt-1 whitespace-pre-wrap break-words">
+                {dimensions.product_vision}
+              </p>
             </div>
           </Card>
         </motion.div>
@@ -938,7 +939,7 @@ export function Auctionpricecomponent() {
                             <h4 className="text-md font-medium text-[#DBD2A4] mb-2">
                               Deine Vision
                             </h4>
-                            <p className="text-sm text-white/90">
+                            <p className="text-sm text-white/90 whitespace-pre-wrap break-words">
                               {dimensions.product_vision}
                             </p>
                           </div>
