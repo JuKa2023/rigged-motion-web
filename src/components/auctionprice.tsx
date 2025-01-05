@@ -8,7 +8,9 @@ import { GoogleSignInComponent } from "./GoogleSignIn";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Trophy } from "lucide-react";
+import ReactConfetti from "react-confetti";
+import { useWindowSize } from "react-use";
 import {
   Dialog,
   DialogContent,
@@ -65,7 +67,10 @@ const DIMENSION_LIMITS = {
 };
 
 // Custom hook for real-time auction updates
-function useAuctionSubscription(onAuctionUpdate: (auction: Auction) => void, onNewBid: (bid: Bid) => void) {
+function useAuctionSubscription(
+  onAuctionUpdate: (auction: Auction) => void,
+  onNewBid: (bid: Bid) => void
+) {
   useEffect(() => {
     // Create and subscribe to the channel
     const channel = supabase.channel("auction-channel", {
@@ -203,6 +208,147 @@ const AnimatedBidHistory = ({
   );
 };
 
+const AuctionEndScreen = ({
+  auction,
+  bids,
+  user,
+  dimensions,
+}: {
+  auction: Auction;
+  bids: Bid[];
+  user: User | null;
+  dimensions: ProductDimensions | null;
+}) => {
+  const winningBid = bids[0]; // First bid is the highest due to ordering
+  const isWinner = user && winningBid && winningBid.user_id === user.id;
+  const { width, height } = useWindowSize();
+  const [showConfetti, setShowConfetti] = useState(true);
+
+  // Stop confetti after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowConfetti(false);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="space-y-8 text-center">
+      {showConfetti && isWinner && (
+        <div className="fixed inset-0 z-50 pointer-events-none">
+          <ReactConfetti
+            width={width}
+            height={height}
+            recycle={false}
+            numberOfPieces={500}
+            gravity={0.2}
+            colors={["#DBD2A4", "#1E4959", "#4CAF50", "#FFF"]}
+          />
+        </div>
+      )}
+      <motion.div
+        className="flex justify-center relative z-10"
+        initial={{ scale: 0, rotate: -180 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 20,
+          duration: 1,
+        }}
+      >
+        <div className="bg-[#1E4959] rounded-full p-6">
+          <Trophy className="w-16 h-16 text-[#DBD2A4]" />
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <h2 className="text-3xl font-bold text-[#DBD2A4] mb-4">
+          Auktion beendet!
+        </h2>
+        <p className="text-xl text-white/90 mb-8">
+          Der finale Verkaufspreis beträgt
+        </p>
+        <div className="text-5xl font-bold text-white mb-8">
+          CHF {winningBid?.amount.toLocaleString()}
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+      >
+        {isWinner ? (
+          <Card className="bg-green-500/10 border-green-500/20 p-8">
+            <h3 className="text-2xl font-bold text-green-400 mb-4">
+              Herzlichen Glückwunsch!
+            </h3>
+            <p className="text-white/90">
+              Sie haben die Auktion gewonnen. Unser Team wird sich in Kürze mit
+              Ihnen in Verbindung setzen, um die nächsten Schritte zu
+              besprechen.
+            </p>
+          </Card>
+        ) : (
+          <Card className="bg-black/40 border-[#DBD2A4]/20 p-8">
+            <h3 className="text-2xl font-bold text-[#DBD2A4] mb-4">
+              Vielen Dank für Ihre Teilnahme
+            </h3>
+            <p className="text-white/90">
+              Die Auktion ist nun beendet. Bleiben Sie dran für zukünftige
+              Auktionen!
+            </p>
+          </Card>
+        )}
+      </motion.div>
+
+      {/* Show final product details if winner */}
+      {isWinner && dimensions && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1 }}
+        >
+          <Card className="bg-black/40 border-[#DBD2A4]/20 p-6">
+            <h3 className="text-xl font-bold text-[#DBD2A4] mb-4">
+              Ihre Produktdetails
+            </h3>
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              <div>
+                <p className="text-sm text-gray-400">Länge</p>
+                <p className="text-lg font-medium text-white">
+                  {dimensions.length} cm
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">Breite</p>
+                <p className="text-lg font-medium text-white">
+                  {dimensions.width} cm
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">Höhe</p>
+                <p className="text-lg font-medium text-white">
+                  {dimensions.height} cm
+                </p>
+              </div>
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">Ihre Vision</p>
+              <p className="text-white mt-1">{dimensions.product_vision}</p>
+            </div>
+          </Card>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
 export function Auctionpricecomponent() {
   const [auction, setAuction] = useState<Auction | null>(null);
   const [bids, setBids] = useState<Bid[]>([]);
@@ -226,8 +372,9 @@ export function Auctionpricecomponent() {
     length: "",
     width: "",
     height: "",
-    product_vision: ""
+    product_vision: "",
   });
+  const [isAuctionEnded, setIsAuctionEnded] = useState(false);
 
   // Callback for auction updates
   const handleAuctionUpdate = useCallback((newAuction: Auction) => {
@@ -236,22 +383,25 @@ export function Auctionpricecomponent() {
   }, []);
 
   // Add callback for new bids
-  const handleNewBid = useCallback((newBid: Bid) => {
-    setBids(prevBids => {
-      // Add new bid to the start of the array and keep only the last 5
-      const updatedBids = [newBid, ...prevBids].slice(0, 5);
-      
-      // Update highest bidder status immediately if the user placed this bid
-      if (user && newBid.user_id === user.id) {
-        setIsHighestBidder(true);
-      } else if (user && isHighestBidder) {
-        // If user was highest bidder but someone else placed a bid, update status
-        setIsHighestBidder(false);
-      }
-      
-      return updatedBids;
-    });
-  }, [user, isHighestBidder]);
+  const handleNewBid = useCallback(
+    (newBid: Bid) => {
+      setBids((prevBids) => {
+        // Add new bid to the start of the array and keep only the last 5
+        const updatedBids = [newBid, ...prevBids].slice(0, 5);
+
+        // Update highest bidder status immediately if the user placed this bid
+        if (user && newBid.user_id === user.id) {
+          setIsHighestBidder(true);
+        } else if (user && isHighestBidder) {
+          // If user was highest bidder but someone else placed a bid, update status
+          setIsHighestBidder(false);
+        }
+
+        return updatedBids;
+      });
+    },
+    [user, isHighestBidder]
+  );
 
   // Use the custom hook with both callbacks
   useAuctionSubscription(handleAuctionUpdate, handleNewBid);
@@ -280,19 +430,20 @@ export function Auctionpricecomponent() {
 
         // If we have both user and auction, check for existing preferences
         if (user) {
-          const { data: preferencesData, error: preferencesError } = await supabase
-            .from("user_auction_preferences")
-            .select("*")
-            .eq("user_id", user.id)
-            .eq("auction_id", auctionData.id)
-            .single();
+          const { data: preferencesData, error: preferencesError } =
+            await supabase
+              .from("user_auction_preferences")
+              .select("*")
+              .eq("user_id", user.id)
+              .eq("auction_id", auctionData.id)
+              .single();
 
           if (!preferencesError && preferencesData) {
             setDimensions({
               length: preferencesData.length,
               width: preferencesData.width,
               height: preferencesData.height,
-              product_vision: preferencesData.product_vision
+              product_vision: preferencesData.product_vision,
             });
           }
         }
@@ -300,13 +451,15 @@ export function Auctionpricecomponent() {
         // Fetch initial bid history
         const { data: bidsData, error: bidsError } = await supabase
           .from("bids")
-          .select(`
+          .select(
+            `
             id,
             amount,
             created_at,
             user_id,
             auction_id
-          `)
+          `
+          )
           .eq("auction_id", auctionData.id)
           .order("created_at", { ascending: false })
           .limit(5);
@@ -392,7 +545,7 @@ export function Auctionpricecomponent() {
           length: preferencesData.length,
           width: preferencesData.width,
           height: preferencesData.height,
-          product_vision: preferencesData.product_vision
+          product_vision: preferencesData.product_vision,
         });
       }
     }
@@ -411,14 +564,14 @@ export function Auctionpricecomponent() {
       length: parseFloat(formInputs.length),
       width: parseFloat(formInputs.width),
       height: parseFloat(formInputs.height),
-      product_vision: formInputs.product_vision.trim()
+      product_vision: formInputs.product_vision.trim(),
     };
 
     const { error } = await supabase.from("user_auction_preferences").insert([
       {
         user_id: user.id,
         auction_id: auction.id,
-        ...newPreferences
+        ...newPreferences,
       },
     ]);
 
@@ -468,17 +621,18 @@ export function Auctionpricecomponent() {
     </div>
   );
 
-  // Update useEffect for timer
+  // Modify the timer useEffect to handle auction end
   useEffect(() => {
     if (auction?.end_time) {
-      const timer = setInterval(() => {
+      const checkAuctionEnd = () => {
         const end = new Date(auction.end_time).getTime();
         const now = new Date().getTime();
         const distance = end - now;
 
         if (distance < 0) {
           setTimeLeft(null);
-          clearInterval(timer);
+          setIsAuctionEnded(true);
+          return true;
         } else {
           setTimeLeft({
             days: Math.floor(distance / (1000 * 60 * 60 * 24)),
@@ -488,10 +642,17 @@ export function Auctionpricecomponent() {
             minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
             seconds: Math.floor((distance % (1000 * 60)) / 1000),
           });
+          return false;
         }
-      }, 1000);
+      };
 
-      return () => clearInterval(timer);
+      // Check immediately
+      const isEnded = checkAuctionEnd();
+      if (!isEnded) {
+        // Only set interval if not ended
+        const timer = setInterval(checkAuctionEnd, 1000);
+        return () => clearInterval(timer);
+      }
     }
   }, [auction?.end_time]);
 
@@ -628,250 +789,260 @@ export function Auctionpricecomponent() {
           )}
         </div>
 
-        {/* Bidding Section - Two Columns */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {/* Current Bid Card */}
-          <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20 shadow-lg">
-            <div className="space-y-6">
-              <div className="text-center">
-                <h2 className="text-xl text-[#DBD2A4] font-semibold mb-4">
-                  Aktuelles Gebot
-                </h2>
-                <motion.div
-                  key={auction?.current_price}
-                  initial={{ scale: 1.1, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="text-5xl font-bold text-white mb-2"
-                >
-                  CHF {auction?.current_price?.toLocaleString() || "---"}
-                </motion.div>
-                <p className="text-sm text-[#DBD2A4]">
-                  Minimale Erhöhung: CHF{" "}
-                  {auction?.min_bid_increment?.toLocaleString() || "---"}
-                </p>
-              </div>
+        {/* Show either auction end screen or bidding section */}
+        {isAuctionEnded && auction ? (
+          <AuctionEndScreen
+            auction={auction}
+            bids={bids}
+            user={user}
+            dimensions={dimensions}
+          />
+        ) : (
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Current Bid Card */}
+            <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20 shadow-lg">
+              <div className="space-y-6">
+                <div className="text-center">
+                  <h2 className="text-xl text-[#DBD2A4] font-semibold mb-4">
+                    Aktuelles Gebot
+                  </h2>
+                  <motion.div
+                    key={auction?.current_price}
+                    initial={{ scale: 1.1, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="text-5xl font-bold text-white mb-2"
+                  >
+                    CHF {auction?.current_price?.toLocaleString() || "---"}
+                  </motion.div>
+                  <p className="text-sm text-[#DBD2A4]">
+                    Minimale Erhöhung: CHF{" "}
+                    {auction?.min_bid_increment?.toLocaleString() || "---"}
+                  </p>
+                </div>
 
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Fehler</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Fehler</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
 
-              {user && auction ? (
-                <div className="space-y-4">
-                  {!dimensions ? (
-                    <Card className="bg-black/40 p-4 space-y-4">
-                      <h3 className="text-lg font-semibold text-[#DBD2A4]">
-                        Produktdetails
-                      </h3>
-                      <p className="text-sm text-white/90">
-                        Bevor du ein Gebot abgeben kannst, gebe bitte die
-                        Abmessungen und eine Beschreibung deines Produkts ein.
-                      </p>
-                      <form
-                        onSubmit={handlePreferencesSubmit}
-                        className="space-y-4"
-                      >
-                        <div className="grid grid-cols-3 gap-4">
-                          <div>
-                            <label className="text-sm text-[#DBD2A4]">
-                              Länge (cm)
-                            </label>
-                            <Input
-                              type="number"
-                              value={formInputs.length}
-                              onChange={handleInputChange("length")}
-                              min={DIMENSION_LIMITS.length.min}
-                              max={DIMENSION_LIMITS.length.max}
-                              step="0.1"
-                              required
-                              className="mt-1"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-sm text-[#DBD2A4]">
-                              Breite (cm)
-                            </label>
-                            <Input
-                              type="number"
-                              value={formInputs.width}
-                              onChange={handleInputChange("width")}
-                              min={DIMENSION_LIMITS.width.min}
-                              max={DIMENSION_LIMITS.width.max}
-                              step="0.1"
-                              required
-                              className="mt-1"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-sm text-[#DBD2A4]">
-                              Höhe (cm)
-                            </label>
-                            <Input
-                              type="number"
-                              value={formInputs.height}
-                              onChange={handleInputChange("height")}
-                              min={DIMENSION_LIMITS.height.min}
-                              max={DIMENSION_LIMITS.height.max}
-                              step="0.1"
-                              required
-                              className="mt-1"
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <label className="text-sm text-[#DBD2A4]">
-                            Produktbeschreibung
-                          </label>
-                          <Textarea
-                            value={formInputs.product_vision}
-                            onChange={handleInputChange("product_vision")}
-                            placeholder="Beschreiben Sie Ihr Produkt und wie Sie es in der Animation präsentiert sehen möchten..."
-                            required
-                            className="mt-1 min-h-[100px] bg-white/95 border-[#DBD2A4]/30 focus:border-[#DBD2A4]/60"
-                          />
-                        </div>
-                        {dimensionsError && (
-                          <Alert variant="destructive">
-                            <AlertCircle className="h-4 w-4" />
-                            <AlertDescription>
-                              {dimensionsError}
-                            </AlertDescription>
-                          </Alert>
-                        )}
-                        <Button
-                          type="submit"
-                          className="w-full bg-[#1E4959] hover:bg-[#2a6275] text-white"
-                        >
-                          Details bestätigen
-                        </Button>
-                      </form>
-                    </Card>
-                  ) : !hasAcceptedTerms ? (
-                    <Card className="bg-black/40 p-4 space-y-4">
-                      <h3 className="text-lg font-semibold text-[#DBD2A4]">
-                        Nutzungsbedingungen
-                      </h3>
-                      <div className="rounded-md border border-[#DBD2A4]/20 p-4 mb-4">
-                        <h4 className="text-md font-medium text-[#DBD2A4] mb-2">
-                          Deine Produktdetails
-                        </h4>
+                {user && auction ? (
+                  <div className="space-y-4">
+                    {!dimensions ? (
+                      <Card className="bg-black/40 p-4 space-y-4">
+                        <h3 className="text-lg font-semibold text-[#DBD2A4]">
+                          Produktdetails
+                        </h3>
                         <p className="text-sm text-white/90">
-                          Länge: {dimensions.length} cm
-                          <br />
-                          Breite: {dimensions.width} cm
-                          <br />
-                          Höhe: {dimensions.height} cm
+                          Bevor du ein Gebot abgeben kannst, gebe bitte die
+                          Abmessungen und eine Beschreibung deines Produkts ein.
                         </p>
-                        <div className="mt-4">
+                        <form
+                          onSubmit={handlePreferencesSubmit}
+                          className="space-y-4"
+                        >
+                          <div className="grid grid-cols-3 gap-4">
+                            <div>
+                              <label className="text-sm text-[#DBD2A4]">
+                                Länge (cm)
+                              </label>
+                              <Input
+                                type="number"
+                                value={formInputs.length}
+                                onChange={handleInputChange("length")}
+                                min={DIMENSION_LIMITS.length.min}
+                                max={DIMENSION_LIMITS.length.max}
+                                step="0.1"
+                                required
+                                className="mt-1"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm text-[#DBD2A4]">
+                                Breite (cm)
+                              </label>
+                              <Input
+                                type="number"
+                                value={formInputs.width}
+                                onChange={handleInputChange("width")}
+                                min={DIMENSION_LIMITS.width.min}
+                                max={DIMENSION_LIMITS.width.max}
+                                step="0.1"
+                                required
+                                className="mt-1"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm text-[#DBD2A4]">
+                                Höhe (cm)
+                              </label>
+                              <Input
+                                type="number"
+                                value={formInputs.height}
+                                onChange={handleInputChange("height")}
+                                min={DIMENSION_LIMITS.height.min}
+                                max={DIMENSION_LIMITS.height.max}
+                                step="0.1"
+                                required
+                                className="mt-1"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="text-sm text-[#DBD2A4]">
+                              Produktbeschreibung
+                            </label>
+                            <Textarea
+                              value={formInputs.product_vision}
+                              onChange={handleInputChange("product_vision")}
+                              placeholder="Beschreiben Sie Ihr Produkt und wie Sie es in der Animation präsentiert sehen möchten..."
+                              required
+                              className="mt-1 min-h-[100px] bg-white/95 border-[#DBD2A4]/30 focus:border-[#DBD2A4]/60"
+                            />
+                          </div>
+                          {dimensionsError && (
+                            <Alert variant="destructive">
+                              <AlertCircle className="h-4 w-4" />
+                              <AlertDescription>
+                                {dimensionsError}
+                              </AlertDescription>
+                            </Alert>
+                          )}
+                          <Button
+                            type="submit"
+                            className="w-full bg-[#1E4959] hover:bg-[#2a6275] text-white"
+                          >
+                            Details bestätigen
+                          </Button>
+                        </form>
+                      </Card>
+                    ) : !hasAcceptedTerms ? (
+                      <Card className="bg-black/40 p-4 space-y-4">
+                        <h3 className="text-lg font-semibold text-[#DBD2A4]">
+                          Nutzungsbedingungen
+                        </h3>
+                        <div className="rounded-md border border-[#DBD2A4]/20 p-4 mb-4">
                           <h4 className="text-md font-medium text-[#DBD2A4] mb-2">
-                            Deine Vision
+                            Deine Produktdetails
                           </h4>
                           <p className="text-sm text-white/90">
-                            {dimensions.product_vision}
+                            Länge: {dimensions.length} cm
+                            <br />
+                            Breite: {dimensions.width} cm
+                            <br />
+                            Höhe: {dimensions.height} cm
                           </p>
+                          <div className="mt-4">
+                            <h4 className="text-md font-medium text-[#DBD2A4] mb-2">
+                              Deine Vision
+                            </h4>
+                            <p className="text-sm text-white/90">
+                              {dimensions.product_vision}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <ScrollArea className="h-40 rounded-md border border-[#DBD2A4]/20 p-4">
-                        <div className="text-sm text-white/90">
-                          <p>1. Allgemeine Bestimmungen</p>
-                          <p>
-                            Diese Nutzungsbedingungen regeln die Teilnahme an
-                            der Auktion für Werbeplätze.
-                          </p>
-                          <p className="mt-4">
-                            Bitte lesen den vollständigen{" "}
-                            <a
-                              href="/assets/legal/auction_contract.pdf"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[#DBD2A4] hover:underline"
-                            >
-                              Auktionsvertrag (PDF)
-                            </a>{" "}
-                            sorgfältig durch, bevor du ein Gebot abgibst.
-                          </p>
-                          <p className="mt-4">
-                            Mit der Teilnahme an der Auktion und der Abgabe
-                            eines Gebots stimmst du den Bedingungen des
-                            Auktionsvertrags zu.
-                          </p>
+                        <ScrollArea className="h-40 rounded-md border border-[#DBD2A4]/20 p-4">
+                          <div className="text-sm text-white/90">
+                            <p>1. Allgemeine Bestimmungen</p>
+                            <p>
+                              Diese Nutzungsbedingungen regeln die Teilnahme an
+                              der Auktion für Werbeplätze.
+                            </p>
+                            <p className="mt-4">
+                              Bitte lesen den vollständigen{" "}
+                              <a
+                                href="/assets/legal/auction_contract.pdf"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[#DBD2A4] hover:underline"
+                              >
+                                Auktionsvertrag (PDF)
+                              </a>{" "}
+                              sorgfältig durch, bevor du ein Gebot abgibst.
+                            </p>
+                            <p className="mt-4">
+                              Mit der Teilnahme an der Auktion und der Abgabe
+                              eines Gebots stimmst du den Bedingungen des
+                              Auktionsvertrags zu.
+                            </p>
+                          </div>
+                        </ScrollArea>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="terms"
+                            checked={hasAcceptedTerms}
+                            onCheckedChange={() => handleTermsAcceptance()}
+                          />
+                          <label
+                            htmlFor="terms"
+                            className="text-sm font-medium text-white/90"
+                          >
+                            Ich akzeptiere die Nutzungsbedingungen und den
+                            Auktionsvertrag
+                          </label>
                         </div>
-                      </ScrollArea>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="terms"
-                          checked={hasAcceptedTerms}
-                          onCheckedChange={() => handleTermsAcceptance()}
-                        />
-                        <label
-                          htmlFor="terms"
-                          className="text-sm font-medium text-white/90"
+                      </Card>
+                    ) : (
+                      <div className="space-y-3">
+                        <div className="relative">
+                          <Input
+                            type="number"
+                            value={bidAmount}
+                            onChange={(e) => setBidAmount(e.target.value)}
+                            placeholder="Geben Sie Ihr Gebot ein"
+                            className="h-12 pl-12 text-lg bg-white/95 border-[#DBD2A4]/30 focus:border-[#DBD2A4]/60"
+                            min={
+                              auction?.current_price +
+                              auction?.min_bid_increment
+                            }
+                            step={auction?.min_bid_increment}
+                            disabled={isHighestBidder}
+                          />
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-medium">
+                            CHF
+                          </span>
+                        </div>
+                        <Button
+                          onClick={handleBid}
+                          disabled={isLoading || isHighestBidder}
+                          variant={isHighestBidder ? "secondary" : "default"}
+                          className={`w-full h-12 text-lg font-medium ${
+                            isHighestBidder
+                              ? "bg-green-600 hover:bg-green-700 text-white"
+                              : "bg-[#1E4959] hover:bg-[#2a6275] text-white"
+                          }`}
                         >
-                          Ich akzeptiere die Nutzungsbedingungen und den
-                          Auktionsvertrag
-                        </label>
+                          {isLoading
+                            ? "Gebot wird platziert..."
+                            : isHighestBidder
+                            ? "Aktuell Höchstbietender"
+                            : "Gebot abgeben"}
+                        </Button>
                       </div>
-                    </Card>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="relative">
-                        <Input
-                          type="number"
-                          value={bidAmount}
-                          onChange={(e) => setBidAmount(e.target.value)}
-                          placeholder="Geben Sie Ihr Gebot ein"
-                          className="h-12 pl-12 text-lg bg-white/95 border-[#DBD2A4]/30 focus:border-[#DBD2A4]/60"
-                          min={
-                            auction?.current_price + auction?.min_bid_increment
-                          }
-                          step={auction?.min_bid_increment}
-                          disabled={isHighestBidder}
-                        />
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 font-medium">
-                          CHF
-                        </span>
-                      </div>
-                      <Button
-                        onClick={handleBid}
-                        disabled={isLoading || isHighestBidder}
-                        variant={isHighestBidder ? "secondary" : "default"}
-                        className={`w-full h-12 text-lg font-medium ${
-                          isHighestBidder
-                            ? "bg-green-600 hover:bg-green-700 text-white"
-                            : "bg-[#1E4959] hover:bg-[#2a6275] text-white"
-                        }`}
-                      >
-                        {isLoading
-                          ? "Gebot wird platziert..."
-                          : isHighestBidder
-                          ? "Aktuell Höchstbietender"
-                          : "Gebot abgeben"}
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-4 text-center">
-                  <p className="text-[#DBD2A4] font-medium">
-                    Bitte melde dich an, um ein Gebot abzugeben
-                  </p>
-                  <GoogleSignInComponent />
-                </div>
-              )}
-            </div>
-          </Card>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-4 text-center">
+                    <p className="text-[#DBD2A4] font-medium">
+                      Bitte melde dich an, um ein Gebot abzugeben
+                    </p>
+                    <GoogleSignInComponent />
+                  </div>
+                )}
+              </div>
+            </Card>
 
-          {/* Live Bids */}
-          <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20 shadow-lg">
-            <h3 className="text-xl font-bold mb-4 text-[#DBD2A4] sticky top-0 bg-black/60 backdrop-blur-sm py-2">
-              Live Gebote
-            </h3>
-            <AnimatedBidHistory bids={bids} user={user} />
-          </Card>
-        </div>
+            {/* Live Bids */}
+            <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20 shadow-lg">
+              <h3 className="text-xl font-bold mb-4 text-[#DBD2A4] sticky top-0 bg-black/60 backdrop-blur-sm py-2">
+                Live Gebote
+              </h3>
+              <AnimatedBidHistory bids={bids} user={user} />
+            </Card>
+          </div>
+        )}
       </div>
 
       {/* Confirmation Dialog */}
