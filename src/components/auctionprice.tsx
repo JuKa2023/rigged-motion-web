@@ -746,11 +746,10 @@ export function Auctionpricecomponent() {
   return (
     <section
       style={{
-        backgroundImage: "url('/assets/background_auction.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
-      className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-16 space-y-16"
+      className="min-h-screen text-white flex flex-col items-center justify-center px-4 py-16 space-y-16 bg-[#0a001f]"
     >
       <div className="absolute inset-0 bg-black/60" />
 
