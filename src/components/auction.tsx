@@ -39,7 +39,7 @@ export function AuctionPageComponent() {
         {/* UFO and Beam with images */}
         <UfoBeam />
 
-        <div className="sticky top-[60vh] w-full max-w-4xl mx-auto px-4 z-20 mb-24 ">
+        <div className="sticky top-[60vh] w-full max-w-4xl mx-auto px-4 z-20">
           <div className="text-center mt-8 space-y-10">
             <h3 className="text-2xl font-bold text-white">
               Premium Werbeplatz
