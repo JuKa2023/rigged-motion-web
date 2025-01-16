@@ -767,42 +767,50 @@ export function Auctionpricecomponent() {
         {/* Video and Product Details - Full Width */}
         <div className="space-y-6">
           <div
-              className="relative aspect-video rounded-lg overflow-hidden bg-black/60 backdrop-blur-lg border border-[#DBD2A4]/20 shadow-lg">
+            className="relative aspect-video rounded-lg overflow-hidden bg-black/60 backdrop-blur-lg border border-[#DBD2A4]/20 shadow-lg cursor-pointer transition-transform duration-300 hover:scale-105"
+            onClick={() =>
+              window.open(
+                "https://www.youtube.com/watch?v=-8TbbSqFKbI",
+                "_blank"
+              )
+            }
+            title="Watch on YouTube"
+          >
             <iframe
-                className="w-full h-full object-cover"
-                src="https://www.youtube.com/embed/-8TbbSqFKbI?autoplay=1&loop=1&playlist=-8TbbSqFKbI"
-                title="YouTube video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
+              className="w-full h-full object-cover pointer-events-none"
+              src="https://www.youtube.com/embed/-8TbbSqFKbI?autoplay=1&loop=1&playlist=-8TbbSqFKbI"
+              title="YouTube video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"/>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
           </div>
 
           {auction && (
-              <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20">
-                <h2 className="text-2xl font-bold mb-4 text-[#DBD2A4]">
-                  {auction.title}
-                </h2>
-                <p className="text-lg text-white/90">{auction.description}</p>
-              </Card>
+            <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20">
+              <h2 className="text-2xl font-bold mb-4 text-[#DBD2A4]">
+                {auction.title}
+              </h2>
+              <p className="text-lg text-white/90">{auction.description}</p>
+            </Card>
           )}
         </div>
 
         {/* Show either auction end screen or bidding section */}
         {isAuctionEnded && auction ? (
-            <AuctionEndScreen
-                auction={auction}
-                bids={bids}
-                user={user}
-                dimensions={dimensions}
-            />
+          <AuctionEndScreen
+            auction={auction}
+            bids={bids}
+            user={user}
+            dimensions={dimensions}
+          />
         ) : (
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {/* Current Bid Card */}
-              <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20 shadow-lg">
-                <div className="space-y-6">
-                  <div className="text-center">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Current Bid Card */}
+            <Card className="bg-black/60 p-6 rounded-lg backdrop-blur-sm border-[#DBD2A4]/20 shadow-lg">
+              <div className="space-y-6">
+                <div className="text-center">
                   <h2 className="text-xl text-[#DBD2A4] font-semibold mb-4">
                     Aktuelles Gebot
                   </h2>
