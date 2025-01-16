@@ -21,11 +21,11 @@ export function AuctionPageComponent() {
         style={{ opacity: titleOpacity }}
       >
         <div className="max-w-2xl mx-auto p-4 space-y-4 flex flex-col items-center justify-center text-center">
-          <h1 className="text-3xl md:text-5xl text-white">
+          <h1 className="text-xl sm:text-2xl md:text-5xl text-white">
             Dein Produkt im
-            <span className=" text-[#DBD2A4] px-4">
-               Galaktischen Rampenlicht
-            </span>
+            <span className="text-[#DBD2A4] px-4">
+    Galaktischen Rampenlicht
+  </span>
           </h1>
           <p className="text-3xl text-white">
             Sichere dir einen exklusiven Werbeplatz in unserem
