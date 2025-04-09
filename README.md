@@ -1,6 +1,26 @@
 # Rigged Motion Studios - Diggezz
 
-This project uses React for the frontend and Supabase for the backend. Follow these instructions to set up your development environment.
+Rigged Motion Studios is a cutting-edge startup specializing in 3D animation and advertising solutions. Our platform showcases our unique approach to digital marketing through an interactive auction-based website that demonstrates our capabilities in creating engaging, animated content.
+
+## Project Overview
+
+This website serves as both a portfolio and a demonstration of our technical capabilities. It features:
+
+- Interactive product showcases with 3D animations
+- Real-time auction functionality
+- Modern, responsive design
+- Secure user authentication
+- Dynamic content management
+
+The platform is built using React for the frontend and Supabase for the backend, providing a seamless and secure user experience.
+
+## Key Features
+
+- **3D Animation Showcase**: Demonstrates our expertise in creating engaging 3D content
+- **Interactive Auctions**: Real-time bidding system for featured products
+- **Secure Authentication**: Google Sign-in integration for user accounts
+- **Responsive Design**: Optimized for all devices and screen sizes
+- **Dynamic Content**: Real-time updates and interactive elements
 
 ## Prerequisites
 
@@ -12,12 +32,14 @@ This project uses React for the frontend and Supabase for the backend. Follow th
 ## Initial Setup
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/JuKa2023/rigged-Motion-Studios_Diggezz2.git
 cd rigged-Motion-Studios_Diggezz2
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -25,6 +47,7 @@ yarn install
 ```
 
 3. Create a `.env` file in the root directory with your Supabase credentials:
+
 ```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -32,6 +55,7 @@ VITE_GOOGLE_CLIENT_ID=your_google_client_id
 ```
 
 You can find these values in your Supabase project settings:
+
 - Project URL: Project Settings > API > Project URL
 - Anon Key: Project Settings > API > Project API keys > anon public
 - Google Client ID: Authentication > Providers > Google > Client ID
@@ -41,11 +65,13 @@ You can find these values in your Supabase project settings:
 ### Installing Supabase CLI
 
 1. Install Supabase CLI globally:
+
 ```bash
 npm install -g supabase
 ```
 
 2. Login to Supabase:
+
 ```bash
 supabase login
 ```
@@ -53,6 +79,7 @@ supabase login
 ### Local Development with Supabase
 
 1. Start the local Supabase instance:
+
 ```bash
 supabase start
 ```
@@ -60,11 +87,13 @@ supabase start
 This will create a local Supabase instance with Docker. The CLI will output local URLs and keys - save these for your `.env` file.
 
 2. Apply migrations:
+
 ```bash
 supabase migration up
 ```
 
 3. Enable the required tables for real-time updates:
+
 ```sql
 ALTER PUBLICATION supabase_realtime ADD TABLE auctions;
 ALTER PUBLICATION supabase_realtime ADD TABLE bids;
@@ -73,16 +102,19 @@ ALTER PUBLICATION supabase_realtime ADD TABLE bids;
 ### Remote Database Management
 
 1. Link your project (first time only):
+
 ```bash
 supabase link --project-ref your-project-ref
 ```
 
 2. Push changes to remote:
+
 ```bash
 supabase db push
 ```
 
 3. Reset remote database (⚠️ Warning: This will delete all data):
+
 ```bash
 supabase db reset --project-ref your-project-ref
 ```
@@ -90,11 +122,13 @@ supabase db reset --project-ref your-project-ref
 ### Database Migrations
 
 1. Create a new migration:
+
 ```bash
 supabase migration new your_migration_name
 ```
 
 2. Apply migrations:
+
 ```bash
 # Local
 supabase migration up
@@ -106,6 +140,7 @@ supabase db push
 ## Running the Application
 
 1. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -158,6 +193,7 @@ If you can't connect to the local database:
 
 1. Check if Docker is running
 2. Try restarting the Supabase instance:
+
 ```bash
 supabase stop && supabase start
 ```
@@ -167,12 +203,14 @@ supabase stop && supabase start
 ### Real-time Updates Not Working
 
 1. Check if real-time is enabled for the tables:
+
 ```sql
 -- Run in Supabase SQL editor
 SELECT * FROM supabase_realtime.subscription;
 ```
 
 2. Verify the publication includes the required tables:
+
 ```sql
 ALTER PUBLICATION supabase_realtime ADD TABLE auctions;
 ALTER PUBLICATION supabase_realtime ADD TABLE bids;
